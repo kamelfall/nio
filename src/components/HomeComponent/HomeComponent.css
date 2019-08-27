@@ -1,0 +1,8 @@
+.heroImage{
+  margin-top: 10vh;
+  height: 85vh;
+  width: 100vw;
+  background-image: url("../../images/kitchen.jpg");
+  background-size: cover;
+  background-position: 75%;
+}
