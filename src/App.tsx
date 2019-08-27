@@ -1,15 +1,12 @@
 import React from 'react';
 import './App.css';
+import { BookingComponent } from './components/BookingComponent/BookingComponent';
 
 class App extends React.Component<{},{}> {
-  constructor(props: any) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="App">
-        
+        <BookingComponent />
       </div>
     );
   }
