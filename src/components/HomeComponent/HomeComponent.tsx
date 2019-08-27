@@ -22,6 +22,7 @@ class HomeComponent extends React.Component<{}, {}> {
             <li>Kyckling</li>
             <li>Tofu</li>
           </ul>
+          <div className="restaurantMenu__button">Boka bord</div>
         </section>
       </main>
     );
