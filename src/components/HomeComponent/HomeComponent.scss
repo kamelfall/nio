@@ -5,4 +5,14 @@
   background-image: url("../../images/kitchen.jpg");
   background-size: cover;
   background-position: 75%;
+  color: white;
+  overflow: auto;
+  
+  p{
+    margin: 50vh auto 0 auto;
+    font-size: 4rem;
+  }
+  h1{
+    font-size: 2rem;
+  }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import './HomeComponent.css';
+import './HomeComponent.scss';
 
 class HomeComponent extends React.Component<{}, {}> {
   
@@ -7,7 +7,8 @@ class HomeComponent extends React.Component<{}, {}> {
     return(
       <main>
         <section className="heroImage">
-
+          <p>구</p>
+          <h1>nio</h1>
         </section>
       </main>
     );
