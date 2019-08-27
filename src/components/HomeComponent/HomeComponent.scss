@@ -1,4 +1,4 @@
-.heroImage{
+.heroImage {
   margin-top: 10vh;
   height: 85vh;
   width: 100vw;
@@ -8,11 +8,39 @@
   color: white;
   overflow: auto;
   
-  p{
+  p {
     margin: 50vh auto 0 auto;
     font-size: 4rem;
   }
-  h1{
+  h1 {
     font-size: 2rem;
   }
+}
+
+.menuInformation {
+  background-color: #B89A8C;
+  width: 100vw;
+  height: 10rem;
+  overflow: auto;
+}
+
+.restaurantMenu {
+  background-color: #14272D;
+  width: 100vw;
+  height: 30rem;
+  overflow: auto;
+  color: white;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    display: inline-block;
+    margin: 1rem auto 0 auto;
+    text-align: left;
+
+    li {
+      margin-bottom: 1rem;
+    }
+  }
+
 }
