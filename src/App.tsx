@@ -3,7 +3,7 @@ import React from 'react';
 import './App.scss';
 
 import HomeComponent from './components/HomeComponent/HomeComponent';
-import Navbar from './Navbar/navbar';
+import NavbarComponent from './components/NavbarComponent/NavbarComponent';
 import BookingComponent from './components/BookingComponent/BookingComponent';
 
 
@@ -11,7 +11,7 @@ class App extends React.Component<{},{}> {
   render() {
     return (
       <div className="App">
-        <Navbar/>
+        <NavbarComponent/>
         <HomeComponent />
         <BookingComponent />
       </div>
