@@ -1,6 +1,9 @@
 import React from 'react';
+
 import './App.scss';
+
 import HomeComponent from './components/HomeComponent/HomeComponent';
+import Navbar from './Navbar/navbar';
 
 class App extends React.Component<{},{}> {
   constructor(props: any) {
@@ -10,6 +13,7 @@ class App extends React.Component<{},{}> {
   render() {
     return (
       <div className="App">
+        <Navbar/>
         <HomeComponent />
       </div>
     );
