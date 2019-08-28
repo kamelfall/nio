@@ -48,3 +48,4 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     );
   }
 }
+export default BookingComponent;

@@ -1,11 +1,11 @@
 import * as React from "react";
-import "./navbar.scss";
+import "./NavbarComponent.scss";
 
   export interface INavbarProps {
 
   }
 
-  class Navbar extends React.Component<INavbarProps, {}> {
+  class NavbarComponent extends React.Component<INavbarProps, {}> {
     constructor(props: INavbarProps) {
       super(props);
     }
@@ -30,4 +30,4 @@ import "./navbar.scss";
 
       )}
   }
-  export default Navbar;
+  export default NavbarComponent;
