@@ -16,7 +16,6 @@
   }
   h1 {
     font-size: 2rem;
-    color: $testColor;
   }
 
   @include desktop {
@@ -27,7 +26,7 @@
 }
 
 .menuInformation {
-  background-color: #B89A8C;
+  background-color: $secondaryColor;
   width: 100vw;
   min-height: 10rem;
   overflow: auto;
@@ -38,7 +37,7 @@
 }
 
 .restaurantMenu {
-  background-color: #14272D;
+  background-color: $primaryColor;
   width: 100vw;
   height: 30rem;
   overflow: auto;
@@ -61,7 +60,7 @@
   }
 
   .restaurantMenu__button {
-    background-color: #C4C4C4;
+    background-color: $secondaryColor2;
     height: 4rem;
     width: 10rem;
     line-height: 4rem;
