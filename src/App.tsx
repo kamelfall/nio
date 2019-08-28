@@ -4,17 +4,16 @@ import './App.scss';
 
 import HomeComponent from './components/HomeComponent/HomeComponent';
 import Navbar from './Navbar/navbar';
+import BookingComponent from './components/BookingComponent/BookingComponent';
+
 
 class App extends React.Component<{},{}> {
-  constructor(props: any) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="App">
         <Navbar/>
         <HomeComponent />
+        <BookingComponent />
       </div>
     );
   }
