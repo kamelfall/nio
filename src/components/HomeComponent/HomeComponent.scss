@@ -1,4 +1,4 @@
-@import '../../styles/media-queries.scss';
+@import '../../styles/style.scss';
 
 .heroImage {
   margin-top: 10vh;
@@ -16,6 +16,7 @@
   }
   h1 {
     font-size: 2rem;
+    color: $testColor;
   }
 
   @include desktop {
