@@ -25,13 +25,40 @@ p {
 }
 .hamburgerMenu {
   margin: 0.6em 0.6em;
-  .hamburger {
+  .bar1, .bar2, .bar3 {
     width: 35px;
     height: 5px;
     background-color: white;
     margin: 6px 0;
     border-radius: 15%;
   }
+}
+.dropDownMenuList{
+  right: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  background-color:$primaryColor;
+  display: none;
+
+  p:hover {
+    color: $secondaryColor; 
+  }
+}
+.show {
+  display: block;
+}
+.bar1.change {
+  -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+  transform: rotate(-45deg) translate(-9px, 6px);
+}
+.bar2.change {
+  opacity: 0;
+}
+.bar3.change {
+  -webkit-transform: rotate(45deg) translate(-8px, -8px);
+  transform: rotate(45deg) translate(-8px, -8px);
 }
 .navigation {
 display: none;
@@ -49,16 +76,25 @@ display: none;
   }
   .navigation {
     display: flex;
-    align-items: center;
+    width: 10%;
+    // border: solid 1px red;
     p {
-      margin: 0 1.5em;
       font-size: 1rem;
+      margin-right: 1.5em;
+    }
+    p:hover {
+      color: $secondaryColor; 
     }
   }
   .restaurantName {
+    text-align: left;
     display: inline-block;
-    font-size: 1rem;
-    margin: 0 1.5em;
+    width: 10%;
+    // border: solid 1px red;
+    p {
+      font-size: 1rem;
+      margin-left: 1.5em;
+    }
   }
   .logo {
     left: 50%;
@@ -66,4 +102,5 @@ display: none;
     font-size: 3rem;
     margin: 0 auto;
   }
+
 }
