@@ -1,5 +1,6 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
+import HomeComponent from './components/HomeComponent/HomeComponent';
 
 class App extends React.Component<{},{}> {
   constructor(props: any) {
@@ -9,7 +10,7 @@ class App extends React.Component<{},{}> {
   render() {
     return (
       <div className="App">
-        
+        <HomeComponent />
       </div>
     );
   }
