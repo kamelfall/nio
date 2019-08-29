@@ -7,7 +7,13 @@ interface IBookingProps {
 }
 
 interface IBookingState {
-  date: any
+  date: Date,
+  pickedDate: {
+    weekday: string,
+    month: string,
+    date: number,
+    year: number
+  }
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
@@ -15,13 +21,28 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     super(props);
 
     this.state = {
-      date: new Date()
+      date: new Date(),
+      pickedDate: {
+        weekday: "",
+        month: "",
+        date: 0,
+        year: 0
+      }
     }
   }
 
   datePick = (date: any) => {
-    this.setState({date});
-    console.log(this.state.date);
+    let dateArray = date.toString().split(" ");
+    console.log(dateArray);
+    let formattedDate = {
+      weekday: dateArray[0],
+      month: dateArray[1],
+      date: dateArray[2],
+      year: dateArray[3]
+    }
+
+    this.setState({pickedDate: formattedDate});
+    console.log(this.state.pickedDate);
   }
 
   render() {
