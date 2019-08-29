@@ -33,15 +33,16 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   datePick = (date: any) => {
     let dateArray = date.toString().split(" ");
-    console.log(dateArray);
     let formattedDate = {
       weekday: dateArray[0],
       month: dateArray[1],
       date: dateArray[2],
       year: dateArray[3]
     }
+    this.setState({pickedDate: formattedDate}, this.handleBooking);
+  }
 
-    this.setState({pickedDate: formattedDate});
+  handleBooking = () => {
     console.log(this.state.pickedDate);
   }
 
