@@ -23,17 +23,36 @@ a:link {
   margin-left: 8px;
   font-family: $nioSymbol;
 }
+@include desktop {
+  .nioLogo {
+    width: 80%;
+  }
+}
 .restaurantName {
   display: none;
+
+  @include desktop {
+    text-align: left;
+    display: inline-block;
+    width: 10%;
+    p {
+      font-size: 1rem;
+      margin-left: 1.5em;
+    }
+  }
 }
 .hamburgerMenu {
   margin: 0.6em 0.6em;
+
   .bar1, .bar2, .bar3 {
     width: 35px;
     height: 5px;
     background-color: white;
     margin: 6px 0;
     border-radius: 15%;
+  }
+  @include desktop {
+    display: none;
   }
 }
 .dropDownMenuList{
@@ -64,23 +83,11 @@ a:link {
   transform: rotate(45deg) translate(-8px, -8px);
 }
 .navigation {
-display: none;
-}
+  display: none;
 
-@media screen and (min-width: 768px) {
-}
-@media screen and (min-width: 1024px) {
-  .logo {
-    font-size: 3rem;
-    margin: 0 auto;
-  }
-  .hamburgerMenu {
-    display: none;
-  }
-  .navigation {
+  @include desktop {
     display: flex;
     width: 10%;
-    // border: solid 1px red;
     p {
       font-size: 1rem;
       margin-right: 1.5em;
@@ -89,21 +96,4 @@ display: none;
       color: $secondaryColor; 
     }
   }
-  .restaurantName {
-    text-align: left;
-    display: inline-block;
-    width: 10%;
-    // border: solid 1px red;
-    p {
-      font-size: 1rem;
-      margin-left: 1.5em;
-    }
-  }
-  .logo {
-    left: 50%;
-    right: 50%;
-    font-size: 3rem;
-    margin: 0 auto;
-  }
-
 }

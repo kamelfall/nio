@@ -26,7 +26,9 @@ import "./NavbarComponent.scss";
             <div className="restaurantName">
             <a href="/"><p>nio</p></a>
             </div>
-            <a href="/"><p className="logo">구</p></a>
+            <div className="nioLogo">
+              <a href="/"><p className="logo">구</p></a>
+            </div>
             <div className="dropDownMenu">
               <div className="hamburgerMenu" onClick={this.toggleMenu}>
                 <div className= {` bar1 ${iconLook} `}></div>
@@ -34,8 +36,8 @@ import "./NavbarComponent.scss";
                 <div className= {` bar3 ${iconLook} `}></div>
               </div>
               <div className= {`dropDownMenuList ${menuVis}`}>
-                <p>Meny</p>
-                <p>Boka</p>
+                <a href="/#menu"><p>Meny</p></a>                
+                <a href="/booking"><p>Boka</p></a>
               </div>
             </div>
             <div className="navigation">
