@@ -1,3 +1,47 @@
-select {
-  float: left;
+@import '../../styles/style.scss';
+
+main {
+  background-color: $primaryColor;
+  height: 100vh;
+  padding-top: 1rem;
+
+  .booking__heading {
+    color: #fff;
+    margin-top: 2rem;
+  }
+
+  .booking__guests {
+    margin: 4rem auto 3rem;
+
+    select {
+      background-color: $secondaryColor2;
+      height: 4rem;
+      padding: 0 1rem;
+      width: 10rem;
+    }
+  }
+
+  .booking__calendar {
+    .react-calendar {
+      background: $calendarColor;
+      margin: 0 auto;
+      width: 60vh;
+    }
+    .react-calendar__tile--active {
+      background: $selectedColor;
+    }
+    .react-calendar__tile:hover, .react-calendar__navigation button:hover {
+      background: $hoverColor;
+    }
+
+    @include tablet {
+      .react-calendar {
+        height: auto;
+        width: 70vh;
+      }
+      .react-calendar__tile {
+        padding: 1.1rem 0.75rem;
+      }
+    }
+  }
 }
