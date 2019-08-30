@@ -13,7 +13,7 @@ class HomeComponent extends React.Component<{}, {}> {
         <section className="menuInformation">
           <p>Konceptet är duvet någonting väldigt komplicerat</p>
         </section>
-        <section className="restaurantMenu">
+        <section className="restaurantMenu" id="menu">
           <h2>Bao's</h2>
           <ul>
             <li>Kimchi</li>

@@ -39,8 +39,8 @@ import "./NavbarComponent.scss";
               </div>
             </div>
             <div className="navigation">
-              <p>Meny</p>
-              <p>Boka</p>
+              <a href="#menu"><p>Meny</p></a>
+              <a href="/booking"><p>Boka</p></a>
             </div>
     
           </nav>
