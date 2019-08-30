@@ -4,7 +4,7 @@ import './App.scss';
 import HomeComponent from './components/HomeComponent/HomeComponent';
 import NavbarComponent from './components/NavbarComponent/NavbarComponent';
 import BookingComponent from './components/BookingComponent/BookingComponent';
-
+import AdminComponent from './components/AdminComponent/AdminComponent';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 
@@ -18,6 +18,7 @@ class App extends React.Component<{},{}> {
             <Route path="/" exact component={HomeComponent} />
             <Route path="/#menu" exact component={HomeComponent} />
             <Route path="/booking" component={BookingComponent} />
+            <Route path="/admin" component={AdminComponent} />
           </Switch>
         </div>
       </Router>
