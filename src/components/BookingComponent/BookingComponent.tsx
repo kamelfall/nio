@@ -1,6 +1,7 @@
 import React from 'react';
 import Calendar from 'react-calendar';
 import './BookingComponent.scss';
+import FormComponent from '../FormComponent/FormComponent';
 
 interface IBookingProps {
 
@@ -69,6 +70,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
             value={this.state.date}
           />
         </section>
+
+        <FormComponent />
 
       </main>
     );
