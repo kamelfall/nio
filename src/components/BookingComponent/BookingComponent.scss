@@ -39,11 +39,13 @@ main {
         height: 40vh;
         width: 70vh;
       }
-
+      .react-calendar__tile {
+        padding: 1.1rem 0.75rem;
+      }
     }
 
     @include desktop {
-
+      
     }
   }
 }
