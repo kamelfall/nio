@@ -1,13 +1,8 @@
 import * as React from "react";
 import "./NavbarComponent.scss";
 
-  export interface INavbarProps {
-
-  }
-  class NavbarComponent extends React.Component<INavbarProps, {}> {
-    constructor(props: INavbarProps) {
-      super(props);
-    }
+  class NavbarComponent extends React.Component<{}, {}> {
+    
     state = { showDropDown: false, icon: false}
 
     toggleMenu = () => {

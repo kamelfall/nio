@@ -1,0 +1,45 @@
+@import '../../styles/style.scss';
+
+main {
+  background-color: $primaryColor;
+  height: 90vh;
+  margin-top: 10vh;
+}
+input {
+  margin-bottom: 2rem;
+  height: 2em;
+  width: 20%;
+  border-radius: 20px;
+  font-size: 1.2em;
+  font-family: $textFont;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+
+  ::placeholder {
+    color: $primaryColor;
+  }
+}
+input[type=text]:focus {
+  width: 50%;
+}
+h2 {
+  font-size: 2em;
+  color: White;
+}
+article {
+  width: 80%;
+  margin: 0 auto;
+
+  table {
+    border: 1px solid white;
+    border-collapse: collapse;
+    width: 100%;
+
+    th, td {
+      text-align: left;
+    }
+    th {
+      font-size: 1.5em;
+    }
+  }
+}
