@@ -1,0 +1,30 @@
+@import '../../styles/style.scss';
+footer {
+  border: 1px solid white;
+  height: 150px;
+  background-color: $secondaryColor;
+  margin-top: 100vh;
+  padding: 3rem;
+}
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+}
+a:link {
+  text-decoration: none;
+  color: $primaryColor;
+}
+.contact {
+  width: 30%;
+  text-align: left;
+
+  .footerLogo {
+    font-size: 2em;
+    margin: 0 auto;
+  }
+}
+.socials {
+  width: 30%;
+  text-align: right;
+  align-self: center;
+}
