@@ -1,9 +1,7 @@
 @import '../../styles/style.scss';
 
 .heroImage {
-  margin-top: 10vh;
   height: 85vh;
-  width: 100vw;
   background-image: url("../../images/kitchen.jpg");
   background-size: cover;
   background-position: 75%;
@@ -27,7 +25,6 @@
 
 .menuInformation {
   background-color: $secondaryColor;
-  width: 100vw;
   min-height: 10rem;
   overflow: auto;
   padding: 1rem;
@@ -38,7 +35,6 @@
 
 .restaurantMenu {
   background-color: $primaryColor;
-  width: 100vw;
   height: 30rem;
   overflow: auto;
   color: white;
