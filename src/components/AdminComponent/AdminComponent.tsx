@@ -7,8 +7,8 @@ class AdminComponent extends React.Component<{}, {}> {
     return (
     <main>
       <section>
-        <h2>Bookings</h2>
-        <input type="text" placeholder="Bookingnr"/>
+        <h2 className="admin__h2">Bookings</h2>
+        <input  className="admin__input" type="text" placeholder="Bookingnr"/>
       </section>
       <article>
         <table>
