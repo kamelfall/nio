@@ -2,7 +2,7 @@ import React from 'react';
 import './FormComponent.scss';
 
 interface IFormProps {
-
+  formSubmit(state:any):void;
 }
 
 interface IFormState {
@@ -34,13 +34,14 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     });
   }
 
-  createBooking = (e: any) => {
+  createBooking = () => {
     console.log(this.state);
+    this.props.formSubmit(this.state);
   }
 
   render() {
     return (
-      <form onSubmit={this.createBooking}>
+      <form>
         <input type="radio" name="time" className="form__radiobutton" 
           value="18:00"
           checked={this.state.time === "18:00"} 
@@ -55,11 +56,11 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
 
         <p className="form__radioText">21:00</p>
         
-        <label htmlFor="firstName">Name:</label>
+        <label htmlFor="firstName">Namn:</label>
         <input type="text" className="form__textbox" 
           name="firstName" 
           onChange={this.handleChange} />
-        <label htmlFor="lastName">Last name:</label>
+        <label htmlFor="lastName">Efternamn:</label>
         <input type="text" className="form__textbox" 
           name="lastName" 
           onChange={this.handleChange} />
@@ -67,12 +68,12 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
         <input type="text" className="form__textbox" 
           name="emailAddress"
           onChange={this.handleChange} />
-        <label htmlFor="phoneNumber">Phone:</label>
+        <label htmlFor="phoneNumber">Telefon:</label>
         <input type="number" className="form__textbox" 
           name="phoneNumber"
           onChange={this.handleChange} />
 
-        <input type="button" value="Submit"
+        <input type="button" value="Boka"
           onClick={this.createBooking} />
       </form>
     );

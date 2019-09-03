@@ -8,12 +8,10 @@ interface IBookingProps {
 }
 
 interface IBookingState {
+  seats: number,
   date: Date,
-  pickedDate: {
-    weekday: string,
-    month: string,
-    date: number,
-    year: number
+  form: {
+
   }
 }
 
@@ -22,29 +20,29 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     super(props);
 
     this.state = {
+      seats: 2,
       date: new Date(),
-      pickedDate: {
-        weekday: "",
-        month: "",
-        date: 0,
-        year: 0
+      form: {
+
       }
     }
   }
 
-  datePick = (date: any) => {
-    let dateArray = date.toString().split(" ");
-    let formattedDate = {
-      weekday: dateArray[0],
-      month: dateArray[1],
-      date: dateArray[2],
-      year: dateArray[3]
-    }
-    this.setState({pickedDate: formattedDate}, this.handleBooking);
+  setSeats = (seatNumber: any) => {
+    this.setState({seats: seatNumber.target.value}, this.handleBooking);
+  }
+
+  datePick = (pickedDate: any) => {
+    this.setState({date: pickedDate});
+  }
+
+  handleForm = (formContent:object) => {
+    this.setState({form: formContent}, this.handleBooking);
   }
 
   handleBooking = () => {
-    console.log(this.state.pickedDate);
+    console.log(this.state.date, this.state.seats, this.state.form);
+
   }
 
   render() {
@@ -53,8 +51,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         <h1 className="booking__heading">Boka</h1>
 
         <section className="booking__guests">
-          <select>
-            <option value="">Antal gäster</option>
+          <select onChange={this.setSeats}
+            value={this.state.seats}>
             <option value="1">1 person</option>
             <option value="2">2 personer</option>
             <option value="3">3 personer</option>
@@ -71,7 +69,9 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
           />
         </section>
 
-        <FormComponent />
+        <section className="booking__form">
+          <FormComponent formSubmit={this.handleForm} />
+        </section>
 
       </main>
     );
