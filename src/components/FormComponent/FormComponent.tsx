@@ -43,6 +43,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     return (
       <form>
         <input type="radio" name="time" className="form__radiobutton" 
+          id="earlyRadio"
           value="18:00"
           checked={this.state.time === "18:00"} 
           onChange={this.handleChange} />
@@ -50,6 +51,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
         <p className="form__radioText">18:00</p>
 
         <input type="radio" name="time" className="form__radiobutton" 
+          id="lateRadio"
           value="21:00"
           checked={this.state.time === "21:00"} 
           onChange={this.handleChange} />

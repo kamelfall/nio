@@ -44,6 +44,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
 
   componentDidMount() {
+    const label = document.querySelectorAll(".react-calendar__navigation__label");
+    label.forEach(oneLabel => {
+      oneLabel.setAttribute("disabled", "true");
+    })
     axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
         let array = this.state.bookings;
@@ -58,41 +62,68 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         this.disableUnavailableDates();
       });
   }
+  // componentDidUpdate() {
+  //   console.log("changed");
+  //   this.disableUnavailableDates();
+  // }
 
   disableUnavailableDates = () => {
     const tiles = document.querySelectorAll(".react-calendar__tile");
     tiles.forEach(tile => {
       const abbr = tile!.firstElementChild;
       const date = abbr!.getAttribute("aria-label");
-      
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[0] +"-"+ splitDate[1];
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-      // console.log(yearMonthDateTime);
-
-      
-      // for(let id in this.state.bookings) {
-      //   console.log(this.state.bookings[id]);
-      // }
-      // console.log(this.state.bookings);
 
       let counter = 0;
-
       for(let i = 0; i < this.state.bookings.length; i++) {
-        // console.log(this.state.bookings[i].date);
         if(this.state.bookings[i].date == yearMonthDateTime ) {
           counter++;
+
           console.log(counter + " on " + this.state.bookings[i].date);
           if(counter >= 2) {
-            console.log("DISABLE");
+            console.log("DISABLE" + this.state.bookings[i].date);
             tile.setAttribute("disabled", "true");
           }
         }
       }
-    
+      
     })
   }
+
+  disableUnavailableSeatings = (tile:any) => {
+    
+    const abbr = tile!.firstElementChild;
+    const date = abbr!.getAttribute("aria-label");
+    const trimmedDate = date!.replace(",", "");
+    const splitDate = trimmedDate!.split(" ");
+    const realDate = splitDate[2] +"-"+ splitDate[0] +"-"+ splitDate[1];
+    const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+
+    let earlyCounter = 0;
+    let lateCounter = 0;
+
+    for(let i = 0; i < this.state.bookings.length; i++) {
+      if(this.state.bookings[i].date == yearMonthDateTime ) {
+        if(this.state.bookings[i].time == "18:00") {
+          earlyCounter++;
+        } else if (this.state.bookings[i].time = "21:00") {
+          lateCounter++;
+        }
+        
+        if(earlyCounter >= 1) {
+          document.getElementById("earlyRadio")!.setAttribute("disabled", "true");
+        }
+        if(lateCounter >= 1) {
+          document.getElementById("lateRadio")!.setAttribute("disabled", "true");
+        }
+      }
+    }
+  }
+
+  // TODO: HEAVY REFRACTOR
 
 
   setSeats = (seatNumber: any) => {
@@ -100,7 +131,9 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
   datePick = (pickedDate: any) => {
-    this.setState({date: pickedDate}, this.handleBooking);
+    this.setState({date: pickedDate});
+    console.log(pickedDate);
+    // this.disableUnavailableSeatings(pickedDate)
   }
 
   handleForm = (formContent:object) => {
