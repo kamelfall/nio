@@ -9,11 +9,23 @@ interface IBookingProps {
 
 }
 
+interface IBooking {
+  customer_id: number,
+  date: string,
+  email: string,
+  first_name: string,
+  last_name: string,
+  order_id: number,
+  phone: number,
+  seats: number,
+  time: string
+}
+
 interface IBookingState {
   seats: number,
   date: Date,
   form: object,
-  bookings: object
+  bookings: IBooking[]
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
@@ -26,9 +38,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       form: {
 
       },
-      bookings: {
-
-      }
+      bookings: []
     }
   }
 
@@ -36,7 +46,12 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   componentDidMount() {
     axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
-        this.setState({bookings: result.data.records});
+        let array = this.state.bookings;
+        let data:[] = result.data.records;
+        for(let i = 0; i < data.length; i++) {
+          array.push(data[i]);
+        }
+        this.setState({bookings: array});
       })
       .then(() => {
         console.log(this.state.bookings);
@@ -50,17 +65,30 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const abbr = tile!.firstElementChild;
       const date = abbr!.getAttribute("aria-label");
       
-      //Fri Aug 30 2019 00:00:00 GMT+0200 (Central European Summer Time)
-      console.log(date);
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[0] +"-"+ splitDate[1];
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-      console.log(yearMonthDateTime);
+      // console.log(yearMonthDateTime);
 
       
-      for(let id in this.state.bookings) {
-      
+      // for(let id in this.state.bookings) {
+      //   console.log(this.state.bookings[id]);
+      // }
+      // console.log(this.state.bookings);
+
+      let counter = 0;
+
+      for(let i = 0; i < this.state.bookings.length; i++) {
+        // console.log(this.state.bookings[i].date);
+        if(this.state.bookings[i].date == yearMonthDateTime ) {
+          counter++;
+          console.log(counter + " on " + this.state.bookings[i].date);
+          if(counter >= 2) {
+            console.log("DISABLE");
+            tile.setAttribute("disabled", "true");
+          }
+        }
       }
     
     })
@@ -72,7 +100,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
   datePick = (pickedDate: any) => {
-    this.setState({date: pickedDate}, this.disableUnavailableDates);
+    this.setState({date: pickedDate}, this.handleBooking);
   }
 
   handleForm = (formContent:object) => {
