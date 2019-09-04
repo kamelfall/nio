@@ -1,6 +1,7 @@
 import React from 'react';
 import Calendar from 'react-calendar';
 import axios from 'axios';
+import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
 
@@ -49,8 +50,14 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const abbr = tile!.firstElementChild;
       const date = abbr!.getAttribute("aria-label");
       
-      const formattedDate = this.convertAbbr(date!);
-      console.log(formattedDate);
+      //Fri Aug 30 2019 00:00:00 GMT+0200 (Central European Summer Time)
+      console.log(date);
+      const trimmedDate = date!.replace(",", "");
+      const splitDate = trimmedDate!.split(" ");
+      const realDate = splitDate[2] +"-"+ splitDate[0] +"-"+ splitDate[1];
+      const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+      console.log(yearMonthDateTime);
+
       
       for(let id in this.state.bookings) {
       
@@ -59,51 +66,13 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     })
   }
 
-  convertAbbr = (monthString: string) => {
-    const array = monthString.split(" ");
-    array[1] = array[1].replace(",", "");
-
-    if(array[0].includes("January")) {
-      array[0] = "01";
-    }else if(array[0].includes("February")) {
-      array[0] = "02";
-    }else if(array[0].includes("March")) {
-      array[0] = "03";
-    }else if(array[0].includes("April")) {
-      array[0] = "04";
-    }else if(array[0].includes("May")) {
-      array[0] = "05";
-    }else if(array[0].includes("June")) {
-      array[0] = "06";
-    }else if(array[0].includes("July")) {
-      array[0] = "07";
-    }else if(array[0].includes("August")) {
-      array[0] = "08";
-    }else if(array[0].includes("September")) {
-      array[0] = "09";
-    }else if(array[0].includes("October")) {
-      array[0] = "10";
-    }else if(array[0].includes("November")) {
-      array[0] = "11";
-    }else if(array[0].includes("December")) {
-      array[0] = "12";
-    }
-
-    if(array[1].length == 1) {
-      array[1] = "0" + array[1];
-    }
-
-    const newString = array[2] + "-" + array[0] + "-" + array[1];
-    return newString;
-  }
-
 
   setSeats = (seatNumber: any) => {
     this.setState({seats: seatNumber.target.value}, this.handleBooking);
   }
 
   datePick = (pickedDate: any) => {
-    this.setState({date: pickedDate}, this.handleBooking);
+    this.setState({date: pickedDate}, this.disableUnavailableDates);
   }
 
   handleForm = (formContent:object) => {
@@ -139,7 +108,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         </section>
 
         <section className="booking__form">
-          <FormComponent formSubmit={this.handleForm} />
+          <FormComponent 
+          formSubmit={this.handleForm} />
         </section>
 
       </main>
