@@ -40,6 +40,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       },
       bookings: []
     }
+    this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
+    this.disableUnavailableSeatings = this.disableUnavailableSeatings.bind(this);
   }
 
 
@@ -67,6 +69,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   //   this.disableUnavailableDates();
   // }
 
+  
+
   disableUnavailableDates = () => {
     const tiles = document.querySelectorAll(".react-calendar__tile");
     tiles.forEach(tile => {
@@ -93,15 +97,16 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     })
   }
 
-  disableUnavailableSeatings = (tile:any) => {
+  disableUnavailableSeatings = (date:any) => {
     
-    const abbr = tile!.firstElementChild;
-    const date = abbr!.getAttribute("aria-label");
-    const trimmedDate = date!.replace(",", "");
-    const splitDate = trimmedDate!.split(" ");
-    const realDate = splitDate[2] +"-"+ splitDate[0] +"-"+ splitDate[1];
-    const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+    //Sat Sep 07 2019 00:00:00 GMT+0200 (Central European Summer Time)
+    //to
+    //2019-09-07 00:00:00
 
+    const splitDate = date!.toString().split(" ");
+    const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
+    const yearMonthDateTime = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+    
     let earlyCounter = 0;
     let lateCounter = 0;
 
@@ -133,7 +138,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   datePick = (pickedDate: any) => {
     this.setState({date: pickedDate});
     console.log(pickedDate);
-    // this.disableUnavailableSeatings(pickedDate)
+    this.disableUnavailableSeatings(pickedDate);
   }
 
   handleForm = (formContent:object) => {
@@ -164,6 +169,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         <section className="booking__calendar">
           <Calendar
             onChange={this.datePick}
+            onActiveDateChange={this.disableUnavailableDates}
             value={this.state.date}
           />
         </section>
