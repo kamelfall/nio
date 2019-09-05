@@ -64,10 +64,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         this.disableUnavailableDates();
       });
   }
-  // componentDidUpdate() {
-  //   console.log("changed");
-  //   this.disableUnavailableDates();
-  // }
 
   
 
@@ -78,11 +74,13 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const date = abbr!.getAttribute("aria-label");
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
-      const realDate = splitDate[2] +"-"+ splitDate[0] +"-"+ splitDate[1];
+      const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
+      
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-
+      
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
+        //console.log("yearmonth " + yearMonthDateTime + " state: " + this.state.bookings[i].date);
         if(this.state.bookings[i].date == yearMonthDateTime ) {
           counter++;
 
@@ -90,6 +88,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
           if(counter >= 2) {
             console.log("DISABLE" + this.state.bookings[i].date);
             tile.setAttribute("disabled", "true");
+            abbr!.setAttribute("style", "pointer-events: none");
           }
         }
       }
@@ -106,15 +105,16 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     const splitDate = date!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const yearMonthDateTime = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-    
+    document.getElementById("earlyRadio")!.removeAttribute("disabled");
+    document.getElementById("lateRadio")!.removeAttribute("disabled");
     let earlyCounter = 0;
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
-      if(this.state.bookings[i].date == yearMonthDateTime ) {
-        if(this.state.bookings[i].time == "18:00") {
+      if(this.state.bookings[i].date === yearMonthDateTime ) {
+        if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
-        } else if (this.state.bookings[i].time = "21:00") {
+        } else if (this.state.bookings[i].time === "21:00") {
           lateCounter++;
         }
         
@@ -137,7 +137,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   datePick = (pickedDate: any) => {
     this.setState({date: pickedDate});
-    console.log(pickedDate);
     this.disableUnavailableSeatings(pickedDate);
   }
 
