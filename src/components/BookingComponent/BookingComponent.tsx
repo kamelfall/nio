@@ -16,7 +16,7 @@ interface IBooking {
   first_name: string,
   last_name: string,
   order_id: number,
-  phone: number,
+  phone: string,
   seats: number,
   time: string
 }
@@ -24,8 +24,15 @@ interface IBooking {
 interface IBookingState {
   seats: number,
   date: Date,
-  form: object,
+  form: IForm,
   bookings: IBooking[]
+}
+
+interface IForm {
+  firstName: string,
+  lastName: string,
+  emailAddress: string,
+  phoneNumber: string
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
@@ -36,7 +43,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       seats: 2,
       date: new Date(),
       form: {
-
+        firstName: "",
+        lastName: "",
+        emailAddress: "",
+        phoneNumber: ""
       },
       bookings: []
     }
@@ -75,12 +85,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
-      
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
       
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
-        //console.log("yearmonth " + yearMonthDateTime + " state: " + this.state.bookings[i].date);
         if(this.state.bookings[i].date == yearMonthDateTime ) {
           counter++;
 
@@ -92,15 +100,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
           }
         }
       }
-      
     })
   }
 
   disableUnavailableSeatings = (date:any) => {
-    
-    //Sat Sep 07 2019 00:00:00 GMT+0200 (Central European Summer Time)
-    //to
-    //2019-09-07 00:00:00
 
     const splitDate = date!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
@@ -140,12 +143,31 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.disableUnavailableSeatings(pickedDate);
   }
 
-  handleForm = (formContent:object) => {
+  handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
   }
 
   handleBooking = () => {
     console.log(this.state.date, this.state.seats, this.state.form);
+    this.submitBooking();
+  }
+
+  submitBooking(){
+
+    axios({
+      method: "POST",
+      url: "http://localhost:8888/guest/createCustomer.php",
+      data: JSON.stringify({
+        first_name: this.state.form.firstName,
+        last_name: this.state.form.lastName,
+        email: this.state.form.emailAddress,
+        phone: this.state.form.phoneNumber
+        })
+      }
+    )
+      .then(function(response){
+        console.log(response);
+      });
   }
 
   render() {
