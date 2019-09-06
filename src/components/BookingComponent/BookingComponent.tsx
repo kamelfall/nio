@@ -29,6 +29,7 @@ interface IBookingState {
 }
 
 interface IForm {
+  time: string,
   firstName: string,
   lastName: string,
   emailAddress: string,
@@ -43,6 +44,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       seats: 2,
       date: new Date(),
       form: {
+        time: "",
         firstName: "",
         lastName: "",
         emailAddress: "",
@@ -89,7 +91,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
-        if(this.state.bookings[i].date == yearMonthDateTime ) {
+        if(this.state.bookings[i].date === yearMonthDateTime ) {
           counter++;
 
           console.log(counter + " on " + this.state.bookings[i].date);
@@ -114,6 +116,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
+      console.log(this.state.bookings[i].date + " - " + yearMonthDateTime);
       if(this.state.bookings[i].date === yearMonthDateTime ) {
         if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
@@ -141,6 +144,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   datePick = (pickedDate: any) => {
     this.setState({date: pickedDate});
     this.disableUnavailableSeatings(pickedDate);
+
+    let previousForm = {...this.state.form};
+    previousForm.time = "";
+    this.setState({form: previousForm});
   }
 
   handleForm = (formContent: IForm) => {
@@ -152,7 +159,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.submitBooking();
   }
 
-  submitBooking(){
+  submitBooking() {
 
     axios({
       method: "POST",
