@@ -16,7 +16,7 @@ interface IBooking {
   first_name: string,
   last_name: string,
   order_id: number,
-  phone: number,
+  phone: string,
   seats: number,
   time: string
 }
@@ -24,8 +24,15 @@ interface IBooking {
 interface IBookingState {
   seats: number,
   date: Date,
-  form: object,
+  form: IForm,
   bookings: IBooking[]
+}
+
+interface IForm {
+  firstName: string,
+  lastName: string,
+  emailAddress: string,
+  phoneNumber: string
 }
 
 export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
@@ -36,7 +43,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       seats: 2,
       date: new Date(),
       form: {
-
+        firstName: "",
+        lastName: "",
+        emailAddress: "",
+        phoneNumber: ""
       },
       bookings: []
     }
@@ -64,10 +74,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         this.disableUnavailableDates();
       });
   }
-  // componentDidUpdate() {
-  //   console.log("changed");
-  //   this.disableUnavailableDates();
-  // }
 
   
 
@@ -78,9 +84,9 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const date = abbr!.getAttribute("aria-label");
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
-      const realDate = splitDate[2] +"-"+ splitDate[0] +"-"+ splitDate[1];
+      const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-
+      
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
         if(this.state.bookings[i].date == yearMonthDateTime ) {
@@ -90,31 +96,28 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
           if(counter >= 2) {
             console.log("DISABLE" + this.state.bookings[i].date);
             tile.setAttribute("disabled", "true");
+            abbr!.setAttribute("style", "pointer-events: none");
           }
         }
       }
-      
     })
   }
 
   disableUnavailableSeatings = (date:any) => {
-    
-    //Sat Sep 07 2019 00:00:00 GMT+0200 (Central European Summer Time)
-    //to
-    //2019-09-07 00:00:00
 
     const splitDate = date!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const yearMonthDateTime = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-    
+    document.getElementById("earlyRadio")!.removeAttribute("disabled");
+    document.getElementById("lateRadio")!.removeAttribute("disabled");
     let earlyCounter = 0;
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
-      if(this.state.bookings[i].date == yearMonthDateTime ) {
-        if(this.state.bookings[i].time == "18:00") {
+      if(this.state.bookings[i].date === yearMonthDateTime ) {
+        if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
-        } else if (this.state.bookings[i].time = "21:00") {
+        } else if (this.state.bookings[i].time === "21:00") {
           lateCounter++;
         }
         
@@ -137,16 +140,34 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   datePick = (pickedDate: any) => {
     this.setState({date: pickedDate});
-    console.log(pickedDate);
     this.disableUnavailableSeatings(pickedDate);
   }
 
-  handleForm = (formContent:object) => {
+  handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
   }
 
   handleBooking = () => {
     console.log(this.state.date, this.state.seats, this.state.form);
+    this.submitBooking();
+  }
+
+  submitBooking(){
+
+    axios({
+      method: "POST",
+      url: "http://localhost:8888/guest/createCustomer.php",
+      data: JSON.stringify({
+        first_name: this.state.form.firstName,
+        last_name: this.state.form.lastName,
+        email: this.state.form.emailAddress,
+        phone: this.state.form.phoneNumber
+        })
+      }
+    )
+      .then(function(response){
+        console.log(response);
+      });
   }
 
   render() {
