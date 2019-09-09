@@ -73,11 +73,11 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         for(let i = 0; i < data.length; i++) {
           array.push(data[i]);
         }
-        this.setState({bookings: array});
+        this.setState({bookings: array}, ()=> {
+          this.disableUnavailableDates();
+
+        })
       })
-      .then(() => {
-        this.disableUnavailableDates();
-      });
   }
 
   
@@ -90,11 +90,17 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
-      const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
       
+      let yearMonthDateTime = "";
+      if(parseInt(splitDate[0])){
+        yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+      } else {
+        yearMonthDateTime = moment(realDate, "YYYY-DD-MMMM").format("YYYY-MM-DD") + " 00:00:00";
+      }
+
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
-        if(this.state.bookings[i].date === yearMonthDateTime) {
+        if(moment(this.state.bookings[i].date).date() === moment(yearMonthDateTime).date()) {
           counter++;
 
           if(counter >= 2) {
@@ -106,7 +112,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     })
   }
 
-  disableUnavailableSeatings = (date:any) => {
+  disableUnavailableSeatings = (date:string) => {
     document.getElementById("earlyButton")!.removeAttribute("disabled");
     document.getElementById("lateButton")!.removeAttribute("disabled");
 
@@ -114,7 +120,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
-      console.log(this.state.bookings[i]);
+      // console.log(this.state.bookings[i]);
       if(this.state.bookings[i].date === date ) {
         if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
