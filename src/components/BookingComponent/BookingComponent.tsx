@@ -24,6 +24,7 @@ interface IBooking {
 interface IBookingState {
   seats: number,
   date: Date,
+  dateString: string,
   form: IForm,
   bookings: IBooking[]
 }
@@ -42,6 +43,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.state = {
       seats: 2,
       date: new Date(),
+      dateString: "",
       form: {
         firstName: "",
         lastName: "",
@@ -52,6 +54,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     }
     this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
     this.disableUnavailableSeatings = this.disableUnavailableSeatings.bind(this);
+    this.submitBooking = this.submitBooking.bind(this);
+    this.createGuest = this.createGuest.bind(this);
   }
 
 
@@ -70,7 +74,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         this.setState({bookings: array});
       })
       .then(() => {
-        console.log(this.state.bookings);
         this.disableUnavailableDates();
       });
   }
@@ -92,9 +95,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         if(this.state.bookings[i].date == yearMonthDateTime ) {
           counter++;
 
-          console.log(counter + " on " + this.state.bookings[i].date);
           if(counter >= 2) {
-            console.log("DISABLE" + this.state.bookings[i].date);
             tile.setAttribute("disabled", "true");
             abbr!.setAttribute("style", "pointer-events: none");
           }
@@ -105,16 +106,15 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   disableUnavailableSeatings = (date:any) => {
 
-    const splitDate = date!.toString().split(" ");
-    const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
-    const yearMonthDateTime = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+    
     document.getElementById("earlyRadio")!.removeAttribute("disabled");
     document.getElementById("lateRadio")!.removeAttribute("disabled");
     let earlyCounter = 0;
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
-      if(this.state.bookings[i].date === yearMonthDateTime ) {
+      console.log(this.state.bookings[i]);
+      if(this.state.bookings[i].date === date ) {
         if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
         } else if (this.state.bookings[i].time === "21:00") {
@@ -139,8 +139,13 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
   datePick = (pickedDate: any) => {
-    this.setState({date: pickedDate});
-    this.disableUnavailableSeatings(pickedDate);
+    const splitDate = pickedDate!.toString().split(" ");
+    //console.log(splitDate);
+    const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
+    const date = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+    console.log(date);
+    this.setState({dateString: date});
+    this.disableUnavailableSeatings(date);
   }
 
   handleForm = (formContent: IForm) => {
@@ -148,13 +153,34 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
   handleBooking = () => {
-    console.log(this.state.date, this.state.seats, this.state.form);
     this.submitBooking();
   }
 
-  submitBooking(){
-
+  createOrder(customerId: string){
     axios({
+      method: "POST",
+      url: "http://localhost:8888/order/create.php",
+      data: {
+        date: this.state.dateString,
+        customer_id: customerId,
+        //time: this.state.form.time,
+        seats: this.state.seats
+      }
+    })
+  }
+
+  async getGuestId(): Promise<any> {
+    await axios({
+      method: "GET",
+      url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
+    })
+    .then(function(response){
+      return response.data.records[0].id;
+    })
+  }
+
+  async createGuest() {
+    await axios({
       method: "POST",
       url: "http://localhost:8888/guest/createCustomer.php",
       data: JSON.stringify({
@@ -165,9 +191,45 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         })
       }
     )
-      .then(function(response){
-        console.log(response);
-      });
+    .then(function(response){
+      console.log(response);
+    });
+  }
+
+  async checkIfGuestAlreadyExists(): Promise<boolean> {
+    let res;
+     await axios({
+      method: "GET",
+      url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
+    })
+    .then(function(response) {
+      console.log(response);
+      res = response;
+    })
+    .catch(function(){});
+    console.log("res: " + res);
+    if(res === undefined){
+      return false;
+    } else {
+      return true;
+    }
+    
+  }
+
+  submitBooking = async () => {
+    let isGuestExisting: boolean;
+    let guestId: string;
+    console.log("hej");
+    isGuestExisting = await this.checkIfGuestAlreadyExists()
+    console.log("två");
+    if(!isGuestExisting){
+      console.log("finns ej");
+      await this.createGuest();
+    }
+    console.log("och sen");
+    guestId = await this.getGuestId();
+    this.createOrder(guestId);
+
   }
 
   render() {

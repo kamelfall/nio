@@ -25,7 +25,6 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
   handleChange = (e: any) => {
     const target = e.target;
     const value = target.value;
-    console.log(value);
     
     const name = target.name;
 
@@ -35,7 +34,6 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
   }
 
   createBooking = () => {
-    console.log(this.state);
     this.props.formSubmit(this.state);
   }
 
