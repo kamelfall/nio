@@ -29,6 +29,7 @@ interface IBookingState {
 }
 
 interface IForm {
+  time: string,
   firstName: string,
   lastName: string,
   emailAddress: string,
@@ -43,6 +44,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       seats: 2,
       date: new Date(),
       form: {
+        time: "",
         firstName: "",
         lastName: "",
         emailAddress: "",
@@ -89,7 +91,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
-        if(this.state.bookings[i].date == yearMonthDateTime ) {
+        if(this.state.bookings[i].date === yearMonthDateTime) {
           counter++;
 
           console.log(counter + " on " + this.state.bookings[i].date);
@@ -108,8 +110,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     const splitDate = date!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const yearMonthDateTime = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-    document.getElementById("earlyRadio")!.removeAttribute("disabled");
-    document.getElementById("lateRadio")!.removeAttribute("disabled");
+    document.getElementById("earlyButton")!.removeAttribute("disabled");
+    document.getElementById("lateButton")!.removeAttribute("disabled");
     let earlyCounter = 0;
     let lateCounter = 0;
 
@@ -122,10 +124,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         }
         
         if(earlyCounter >= 1) {
-          document.getElementById("earlyRadio")!.setAttribute("disabled", "true");
+          document.getElementById("earlyButton")!.setAttribute("disabled", "true");
         }
         if(lateCounter >= 1) {
-          document.getElementById("lateRadio")!.setAttribute("disabled", "true");
+          document.getElementById("lateButton")!.setAttribute("disabled", "true");
         }
       }
     }
@@ -141,6 +143,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   datePick = (pickedDate: any) => {
     this.setState({date: pickedDate});
     this.disableUnavailableSeatings(pickedDate);
+
+    let previousForm = {...this.state.form};
+    previousForm.time = "";
+    this.setState({form: previousForm});
   }
 
   handleForm = (formContent: IForm) => {
@@ -152,7 +158,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.submitBooking();
   }
 
-  submitBooking(){
+  submitBooking() {
 
     axios({
       method: "POST",
