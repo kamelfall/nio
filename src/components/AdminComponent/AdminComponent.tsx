@@ -15,7 +15,8 @@ interface IBooking {
 }
 
 interface IBookingState {
-  bookings: IBooking[]
+  bookings: IBooking[],
+  bookingNr: number,
 }
 
 class AdminComponent extends React.Component<{}, IBookingState> {
@@ -23,10 +24,24 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     super(props);
 
     this.state = {
-      bookings: []
+      bookings: [],
+      bookingNr: 0,
     }
+
+    this.adminDeleteOrder = this.adminDeleteOrder.bind(this);
+  }
+  adminDeleteOrder(id: number) {
+    // let reservationToDelete = id;
+    this.setState({bookingNr: id})
+    console.log(id);
+    axios.delete(`http://localhost:8888/order/delete.php?id=${id}`)
+      .then((result: any) => {
+        console.log(result);
+      })
+    this.componentDidMount();
   }
   componentDidMount() {
+    this.setState({bookings:[]})
     axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
         let array = this.state.bookings;
@@ -36,21 +51,21 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         }
         this.setState({bookings: array});
       })
-      console.log(this.state.bookings);
-      
-    }
-
+      console.log(this.state.bookings);  
+  }
   public render() {
 
     const orders = this.state.bookings;
     const mappedOrders = orders.map(order => 
       <tr>
-      <td>{order.order_id}</td>
-      <td>{order.date}</td>
-      <td>{order.time}</td>
-      <td>{order.first_name} {order.last_name}</td>
-      <td>{order.seats}</td>
-      <td>{order.email}</td>
+        <td>{order.order_id}</td>
+        <td>{order.date}</td>
+        <td>{order.time}</td>
+        <td>{order.first_name} {order.last_name}</td>
+        <td>{order.seats}</td>
+        <td>{order.email}</td>
+        <button onClick={this.adminDeleteOrder.bind(this, order.order_id)} className="deleteOrder" value={order.order_id}>
+        </button>
       </tr>)
     
 
@@ -75,6 +90,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
           </thead>
           <tbody>
            {mappedOrders}
+
           </tbody>
         </table>
       </article>
