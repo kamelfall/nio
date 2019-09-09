@@ -203,7 +203,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   async checkIfGuestAlreadyExists(): Promise<boolean> {
     let res;
-     await axios({
+    await axios({
       method: "GET",
       url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
     })
@@ -220,6 +220,21 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     
   }
 
+  sendEmail() {
+    axios({
+      method: "POST",
+      url: "http://localhost:8888/guest/email.php",
+      data: JSON.stringify({
+        first_name: this.state.form.firstName,
+        last_name: this.state.form.lastName,
+        email: this.state.form.emailAddress,
+        date: this.state.dateString,
+        time: this.state.form.time,
+        seats: this.state.seats
+      })
+    })
+  }
+
   submitBooking = async () => {
     let isGuestExisting: boolean;
     let guestId: string;
@@ -229,7 +244,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     }
     guestId = await this.getGuestId();
     this.createOrder(guestId);
-
+    //this.sendEmail();
   }
 
   render() {
