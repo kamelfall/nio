@@ -229,7 +229,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     }
     guestId = await this.getGuestId();
     this.createOrder(guestId);
-
   }
 
   render() {
