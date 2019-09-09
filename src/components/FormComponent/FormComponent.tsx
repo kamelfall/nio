@@ -38,24 +38,11 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
   }
 
   render() {
-    return (
-      <form>
-        <input type="radio" name="time" className="form__radiobutton" 
-          id="earlyRadio"
-          value="18:00"
-          checked={this.state.time === "18:00"} 
-          onChange={this.handleChange} />
+    let form = <p></p>;
+    const time = this.state.time;
 
-        <p className="form__radioText">18:00</p>
-
-        <input type="radio" name="time" className="form__radiobutton" 
-          id="lateRadio"
-          value="21:00"
-          checked={this.state.time === "21:00"} 
-          onChange={this.handleChange} />
-
-        <p className="form__radioText">21:00</p>
-        
+    if(time === "18:00" || time === "21:00") {
+      form = <div className="form__credentials">
         <label htmlFor="firstName">Namn:</label>
         <input type="text" className="form__textbox" 
           name="firstName" 
@@ -75,6 +62,25 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
 
         <input type="button" value="Boka"
           onClick={this.createBooking} />
+      </div>
+    } else {
+      form = <p className="form__prompt">Välj en tid!</p>
+    }
+
+    return (
+      <form>
+        <input type="button" name="time" className="form__timeButton" 
+          id="earlyButton"
+          value="18:00"
+          onClick={this.handleChange} />
+
+        <input type="button" name="time" className="form__timeButton" 
+          id="lateButton"
+          value="21:00"
+          onClick={this.handleChange} />
+
+        {form}
+        
       </form>
     );
   }

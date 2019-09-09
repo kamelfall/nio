@@ -30,6 +30,7 @@ interface IBookingState {
 }
 
 interface IForm {
+  time: string,
   firstName: string,
   lastName: string,
   emailAddress: string,
@@ -45,6 +46,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       date: new Date(),
       dateString: "",
       form: {
+        time: "",
         firstName: "",
         lastName: "",
         emailAddress: "",
@@ -92,7 +94,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
-        if(this.state.bookings[i].date == yearMonthDateTime ) {
+        if(this.state.bookings[i].date === yearMonthDateTime) {
           counter++;
 
           if(counter >= 2) {
@@ -105,10 +107,9 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
   disableUnavailableSeatings = (date:any) => {
+    document.getElementById("earlyButton")!.removeAttribute("disabled");
+    document.getElementById("lateButton")!.removeAttribute("disabled");
 
-    
-    document.getElementById("earlyRadio")!.removeAttribute("disabled");
-    document.getElementById("lateRadio")!.removeAttribute("disabled");
     let earlyCounter = 0;
     let lateCounter = 0;
 
@@ -122,10 +123,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         }
         
         if(earlyCounter >= 1) {
-          document.getElementById("earlyRadio")!.setAttribute("disabled", "true");
+          document.getElementById("earlyButton")!.setAttribute("disabled", "true");
         }
         if(lateCounter >= 1) {
-          document.getElementById("lateRadio")!.setAttribute("disabled", "true");
+          document.getElementById("lateButton")!.setAttribute("disabled", "true");
         }
       }
     }
@@ -146,6 +147,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     console.log(date);
     this.setState({dateString: date});
     this.disableUnavailableSeatings(date);
+
+    let previousForm = {...this.state.form};
+    previousForm.time = "";
+    this.setState({form: previousForm});
   }
 
   handleForm = (formContent: IForm) => {
