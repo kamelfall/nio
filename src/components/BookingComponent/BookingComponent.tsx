@@ -91,7 +91,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
-        if(this.state.bookings[i].date === yearMonthDateTime ) {
+        if(this.state.bookings[i].date === yearMonthDateTime) {
           counter++;
 
           console.log(counter + " on " + this.state.bookings[i].date);
@@ -110,13 +110,12 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     const splitDate = date!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const yearMonthDateTime = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-    document.getElementById("earlyRadio")!.removeAttribute("disabled");
-    document.getElementById("lateRadio")!.removeAttribute("disabled");
+    document.getElementById("earlyButton")!.removeAttribute("disabled");
+    document.getElementById("lateButton")!.removeAttribute("disabled");
     let earlyCounter = 0;
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
-      console.log(this.state.bookings[i].date + " - " + yearMonthDateTime);
       if(this.state.bookings[i].date === yearMonthDateTime ) {
         if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
@@ -125,10 +124,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         }
         
         if(earlyCounter >= 1) {
-          document.getElementById("earlyRadio")!.setAttribute("disabled", "true");
+          document.getElementById("earlyButton")!.setAttribute("disabled", "true");
         }
         if(lateCounter >= 1) {
-          document.getElementById("lateRadio")!.setAttribute("disabled", "true");
+          document.getElementById("lateButton")!.setAttribute("disabled", "true");
         }
       }
     }
