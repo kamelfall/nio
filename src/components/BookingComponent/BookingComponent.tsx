@@ -165,17 +165,17 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     axios({
       method: "POST",
       url: "http://localhost:8888/order/create.php",
-      data: {
+      data: JSON.stringify({
         date: this.state.dateString,
         customer_id: customerId,
-        //time: this.state.form.time,
+        time: this.state.form.time,
         seats: this.state.seats
-      }
+      })
     })
   }
 
   async getGuestId(): Promise<any> {
-    await axios({
+    return await axios({
       method: "GET",
       url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
     })
@@ -212,7 +212,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       res = response;
     })
     .catch(function(){});
-    console.log("res: " + res);
     if(res === undefined){
       return false;
     } else {
@@ -224,14 +223,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   submitBooking = async () => {
     let isGuestExisting: boolean;
     let guestId: string;
-    console.log("hej");
     isGuestExisting = await this.checkIfGuestAlreadyExists()
-    console.log("två");
     if(!isGuestExisting){
-      console.log("finns ej");
       await this.createGuest();
     }
-    console.log("och sen");
     guestId = await this.getGuestId();
     this.createOrder(guestId);
 
