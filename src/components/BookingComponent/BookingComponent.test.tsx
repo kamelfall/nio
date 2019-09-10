@@ -1,19 +1,32 @@
 import React from 'react'
-import axios from 'axios'
-import {render, fireEvent, waitForElement} from '@testing-library/react';
+import Adapter from 'enzyme-adapter-react-16';
+import {shallow, configure} from 'enzyme';
 import BookingComponent from './BookingComponent';
+import FormComponent from '../FormComponent/FormComponent';
 
-test('Fetch makes an API call and displays the greeting', async () => {
-  const fakeAxios = {
-    get: jest.fn(() => Promise.resolve({data: {greeting: 'hello there'}})),
-  }
-  const url = 'https://example.com/get-hello-there'
-  //const {getByText, getByTestId} = render(<BookingComponent url={url} axios={fakeAxios} />)
-  //fireEvent.click(getByText(/fetch/i))
+configure({adapter: new Adapter()});
 
-  const greetingNode = await waitForElement(() => getByTestId('greeting'))
+describe('BookingComponent', () => {
+  
+  it('should contain <FormComponent />', () => {
+    const wrapper = shallow(<BookingComponent />);
+    expect(wrapper.find(FormComponent)).toBeTruthy();
+  })
 
-  expect(fakeAxios.get).toHaveBeenCalledTimes(1)
-  expect(fakeAxios.get).toHaveBeenCalledWith(url)
-  expect(greetingNode).toHaveTextContent('hello there')
+  it('should call disableUnavailableDates function on mount', () => {
+    const spy = jest.spyOn(BookingComponent.prototype, 'disableUnavailableDates');
+    const wrapper = shallow(<BookingComponent />);
+    wrapper.instance().disableUnavailableDates();
+    expect(spy).toHaveBeenCalled();
+  })
+})
+
+describe('getGuestId', () => {
+  it('should be able to run', () => {
+    const getGuestId = jest.fn(() => '33');
+    getGuestId();
+    expect(getGuestId).toHaveBeenCalled();
+    expect(getGuestId).toHaveBeenCalledTimes(1);
+    expect(getGuestId).toReturnWith('33');
+  })
 })
