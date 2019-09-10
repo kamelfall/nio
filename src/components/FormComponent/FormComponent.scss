@@ -1,12 +1,55 @@
 @import '../../styles/style.scss';
 
-form {
-  input {
+#form {
+  margin: 0 auto;
+
+  .form__textbox, .form__credentials .form__timeButton {
     background-color: $secondaryColor2;
     border: none;
   }
-  label {
-    color: #fff;
+
+  .form__submit {
+    padding: 1rem;
+    margin: 2rem auto;
+  }
+
+  .form__timeButton {
+    margin:2rem;
+    padding: 1rem;
+  }
+
+  @include tablet {
+    .form__submit, .form__timeButton {
+      padding: 1rem 2rem;
+    }
+  }
+
+  .form__credentials {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+
+    .form__row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      padding: 1rem 0;
+
+      width: 90%;
+      @include tablet {
+        width: 50%;
+      }
+      
+      label {
+        color: #fff;
+        float: left;
+        margin: 1rem;
+      }
+      .form__textbox {
+        padding-left: 1rem; 
+      }
+    }
   }
 }
 .errorMsg {

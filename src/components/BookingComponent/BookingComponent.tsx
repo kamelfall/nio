@@ -285,7 +285,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
   render() {
     return (
-      <main>
+      <main id="booking">
         <h1 className="booking__heading">Boka</h1>
         <section className="booking__guests">
           <select onChange={this.setSeats}
