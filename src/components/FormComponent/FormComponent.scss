@@ -1,11 +1,41 @@
 @import '../../styles/style.scss';
 
-form {
-  input {
+#form {
+  margin: 0 auto;
+
+  .form__textbox, .form__credentials .form__timeButton {
     background-color: $secondaryColor2;
     border: none;
   }
-  label {
-    color: #fff;
+
+  .form__submit {
+    padding: 1rem;
+    margin: 2rem auto;
+  }
+
+  .form__timeButton {
+    margin:2rem;
+    padding: 1rem;
+  }
+  .form__credentials {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+
+    .form__row {
+      display: flex;
+      justify-content: flex-end;
+      padding: 1rem;
+      
+      label {
+        color: #fff;
+        float: left;
+        margin: 1rem;
+      }
+      .form__textbox {
+        padding-left: 1rem; 
+      }
+    }
   }
 }

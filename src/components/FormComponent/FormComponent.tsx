@@ -42,33 +42,42 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     const time = this.state.time;
 
     if(time === "18:00" || time === "21:00") {
-      form = <div className="form__credentials">
-        <label htmlFor="firstName">Namn:</label>
-        <input type="text" className="form__textbox" 
-          name="firstName" 
-          onChange={this.handleChange} />
-        <label htmlFor="lastName">Efternamn:</label>
-        <input type="text" className="form__textbox" 
-          name="lastName" 
-          onChange={this.handleChange} />
-        <label htmlFor="emailAddress">E-mail:</label>
-        <input type="text" className="form__textbox" 
-          name="emailAddress"
-          onChange={this.handleChange} />
-        <label htmlFor="phoneNumber">Telefon:</label>
-        <input type="number" className="form__textbox" 
-          name="phoneNumber"
-          onChange={this.handleChange} />
+      form = 
+      <ul className="form__credentials">
+        <li className="form__row">
+          <label htmlFor="firstName">Namn:</label>
+          <input type="text" className="form__textbox" 
+            name="firstName" 
+            onChange={this.handleChange} />
+        </li>
+        <li className="form__row">
+          <label htmlFor="lastName">Efternamn:</label>
+          <input type="text" className="form__textbox" 
+            name="lastName" 
+            onChange={this.handleChange} />
+        </li>
+        <li className="form__row">
+          <label htmlFor="emailAddress">E-mail:</label>
+          <input type="text" className="form__textbox" 
+            name="emailAddress"
+            onChange={this.handleChange} />
+        </li>
+        <li className="form__row">
+          <label htmlFor="phoneNumber">Telefon:</label>
+          <input type="number" className="form__textbox" 
+            name="phoneNumber"
+            onChange={this.handleChange} />
+        </li>
 
-        <input type="button" value="Boka"
+        <input type="button" className="form__submit" value="Boka"
           onClick={this.createBooking} />
-      </div>
+      </ul>
     } else {
       form = <p className="form__prompt">Välj en tid!</p>
     }
 
     return (
-      <form>
+      <form id="form">
         <input type="button" name="time" className="form__timeButton" 
           id="earlyButton"
           value="18:00"
