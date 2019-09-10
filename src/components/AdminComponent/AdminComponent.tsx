@@ -68,7 +68,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       </tr>)
     
     return (
-    <main>
+    <main id="admin">
       <section>
         <h2 className="admin__h2">Bookings</h2>
         <input  className="admin__input" type="text" placeholder="Bookingnr"/>
