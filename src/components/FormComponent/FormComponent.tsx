@@ -62,20 +62,20 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
         <label htmlFor="firstName">Namn:</label>
         <input type="text" className="form__textbox" 
           name="firstName" 
-          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+"/>
+          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+" required/>
         <label htmlFor="lastName">Efternamn:</label>
         <input type="text" className="form__textbox" 
           name="lastName" 
-          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+"/>
+          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+" required/>
         <label htmlFor="emailAddress">E-mail:</label>
         <input type="email" className="form__textbox" 
           name="emailAddress"
-          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+"/>
+          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+" required/>
           <p className="errorMsg">{this.state.emailValidation}</p>
         <label htmlFor="phoneNumber">Telefon:</label>
         <input type="number" className="form__textbox" 
           name="phoneNumber"
-          onChange={this.handleChange} />
+          onChange={this.handleChange} required/>
         {/* <input type="checkbox"/> */}
         <input type="button" value="Boka"
           onClick={this.createBooking} />
@@ -96,7 +96,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
           onClick={this.handleChange} />
 
         {form}
-        
+
       </form>
     );
   }
