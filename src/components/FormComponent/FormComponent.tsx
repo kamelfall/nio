@@ -18,14 +18,26 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
       firstName: "",
       lastName: "",
       emailAddress: "",
-      phoneNumber: ""
+      phoneNumber: "",
+      emailValidation: "",
     }
+  }
+  validate = () => {
+    let emailValidation = "";
+
+    if(!this.state.emailAddress.includes('@')){
+      emailValidation = "Invalid Email"
+    }
+    if( emailValidation ){
+      this.setState({ emailValidation });
+      return false;
+    }
+    return true;
   }
 
   handleChange = (e: any) => {
     const target = e.target;
     const value = target.value;
-    
     const name = target.name;
 
     this.setState({
@@ -34,7 +46,11 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
   }
 
   createBooking = () => {
-    this.props.formSubmit(this.state);
+    const isValid:any = this.validate();
+    if(isValid) {
+      console.log(this.state);
+      this.props.formSubmit(this.state);
+    }
   }
 
   render() {
@@ -46,27 +62,27 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
         <label htmlFor="firstName">Namn:</label>
         <input type="text" className="form__textbox" 
           name="firstName" 
-          onChange={this.handleChange} />
+          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+"/>
         <label htmlFor="lastName">Efternamn:</label>
         <input type="text" className="form__textbox" 
           name="lastName" 
-          onChange={this.handleChange} />
+          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+"/>
         <label htmlFor="emailAddress">E-mail:</label>
-        <input type="text" className="form__textbox" 
+        <input type="email" className="form__textbox" 
           name="emailAddress"
-          onChange={this.handleChange} />
+          onChange={this.handleChange} pattern="[a-z]\w{4,}\d+"/>
+          <p className="errorMsg">{this.state.emailValidation}</p>
         <label htmlFor="phoneNumber">Telefon:</label>
         <input type="number" className="form__textbox" 
           name="phoneNumber"
           onChange={this.handleChange} />
-
+        {/* <input type="checkbox"/> */}
         <input type="button" value="Boka"
           onClick={this.createBooking} />
       </div>
     } else {
       form = <p className="form__prompt">Välj en tid!</p>
     }
-
     return (
       <form>
         <input type="button" name="time" className="form__timeButton" 
