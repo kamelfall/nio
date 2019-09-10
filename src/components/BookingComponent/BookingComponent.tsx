@@ -161,8 +161,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.submitBooking();
   }
 
-  createOrder(customerId: string){
-    axios({
+  async createOrder(customerId: string){
+    await axios({
       method: "POST",
       url: "http://localhost:8888/order/create.php",
       data: JSON.stringify({
@@ -217,18 +217,18 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     } else {
       return true;
     }
-    
   }
 
   sendEmail() {
+    let dateForEmail = this.state.dateString.split(" ");
     axios({
       method: "POST",
-      url: "http://localhost:8888/guest/email.php",
+      url: "http://localhost:8888/email/sendEmail.php",
       data: JSON.stringify({
         first_name: this.state.form.firstName,
         last_name: this.state.form.lastName,
         email: this.state.form.emailAddress,
-        date: this.state.dateString,
+        date: dateForEmail[0],
         time: this.state.form.time,
         seats: this.state.seats
       })
@@ -243,8 +243,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       await this.createGuest();
     }
     guestId = await this.getGuestId();
-    this.createOrder(guestId);
-    //this.sendEmail();
+    await this.createOrder(guestId);
+    this.sendEmail();
   }
 
   render() {
