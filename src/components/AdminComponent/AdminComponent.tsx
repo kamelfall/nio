@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./AdminComponent.scss";
 import axios from 'axios';
+import moment from 'moment';
 
 interface IBooking {
   customer_id: number,
@@ -30,16 +31,6 @@ class AdminComponent extends React.Component<{}, IBookingState> {
 
     this.adminDeleteOrder = this.adminDeleteOrder.bind(this);
   }
-  adminDeleteOrder(id: number) {
-    // let reservationToDelete = id;
-    this.setState({bookingNr: id})
-    console.log(id);
-    axios.delete(`http://localhost:8888/order/delete.php?id=${id}`)
-      .then((result: any) => {
-        console.log(result);
-      })
-    this.componentDidMount();
-  }
   componentDidMount() {
     this.setState({bookings:[]})
     axios.get("http://localhost:8888/order/readAll.php")
@@ -51,7 +42,15 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         }
         this.setState({bookings: array});
       })
-      console.log(this.state.bookings);  
+      console.log(this.state.bookings);
+  }
+  adminDeleteOrder(id: number) {
+    this.setState({bookingNr: id})
+    axios.delete(`http://localhost:8888/order/delete.php?id=${id}`)
+      .then((result: any) => {
+        console.log(result);
+        this.componentDidMount();
+      })
   }
   public render() {
 
@@ -68,7 +67,6 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         </button>
       </tr>)
     
-
     return (
     <main>
       <section>
@@ -90,12 +88,9 @@ class AdminComponent extends React.Component<{}, IBookingState> {
           </thead>
           <tbody>
            {mappedOrders}
-
           </tbody>
         </table>
       </article>
-
-
     </main>
   )}
 }

@@ -4,11 +4,11 @@ import axios from 'axios';
 import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
+import { number } from 'prop-types';
 
 interface IBookingProps {
 
 }
-
 interface IBooking {
   customer_id: number,
   date: string,
@@ -26,7 +26,8 @@ interface IBookingState {
   date: Date,
   dateString: string,
   form: IForm,
-  bookings: IBooking[]
+  bookings: IBooking[],
+  dateOfToday: []
 }
 
 interface IForm {
@@ -52,7 +53,9 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         emailAddress: "",
         phoneNumber: ""
       },
-      bookings: []
+      bookings: [],
+      dateOfToday: [],
+
     }
     this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
     this.disableUnavailableSeatings = this.disableUnavailableSeatings.bind(this);
@@ -77,21 +80,20 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       })
       .then(() => {
         this.disableUnavailableDates();
+        // this.deleteOrdersWithPassedDate();  
       });
   }
-
-  
-
   disableUnavailableDates = () => {
     const tiles = document.querySelectorAll(".react-calendar__tile");
     tiles.forEach(tile => {
       const abbr = tile!.firstElementChild;
       const date = abbr!.getAttribute("aria-label");
+
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-      
+      // console.log(trimmedDate);
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
         if(this.state.bookings[i].date === yearMonthDateTime) {
@@ -105,6 +107,46 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       }
     })
   }
+  // deleteOrdersWithPassedDate() {
+  //   var todaysDate = moment().format("YYYY-MM-DD");
+
+  //   const splitDate = todaysDate!.split("-");
+  //   const newDate1 = parseInt(splitDate[0]);
+  //   const newDate2 = parseInt(splitDate[1]);
+  //   const newDate3 = parseInt(splitDate[2]);
+
+  //   const todaysDateNew = [];
+  //   todaysDateNew.push(newDate1, newDate2, newDate3);
+  //   // todaysDateNew.push(newDate2);
+  //   // todaysDateNew.push(newDate3);
+  //   console.log(todaysDateNew);
+
+  //   axios.get("http://localhost:8888/order/readAll.php")
+  //     .then((result: any) => {
+  //       let data:[] = result.data.records;
+  //       const formerDates = [];
+
+  //       for(let i = 0; i < data.length; i++) {
+  //         const passedReservations = this.state.bookings[i].date;
+  //         const splitDate = passedReservations!.split(" ");
+  //         const separateDate = splitDate[0];
+  //         const separate2 = separateDate!.split("-");
+
+  //         const sep1 = parseInt(separate2[0]);
+  //         const sep2 = parseInt(separate2[1]);
+  //         const sep3 = parseInt(separate2[2]);
+  //         formerDates.push(sep1, sep2, sep3);
+  //         // console.log(formerDates);
+  //       }
+
+  //     })
+  //     // var a = moment(todaysDateNew);
+  //     //   var b = moment(formerDates);
+  //     //   let difference = a.diff(b, 'days');
+  //     //   // var duration = moment.duration(todaysDateNew.diff(formerDates))
+  //     //   console.log(difference);
+
+  // }
 
   disableUnavailableSeatings = (date:any) => {
     document.getElementById("earlyButton")!.removeAttribute("disabled");
@@ -114,7 +156,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
-      console.log(this.state.bookings[i]);
       if(this.state.bookings[i].date === date ) {
         if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
@@ -134,17 +175,13 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   // TODO: HEAVY REFRACTOR
 
-
   setSeats = (seatNumber: any) => {
     this.setState({seats: seatNumber.target.value}, this.handleBooking);
   }
-
   datePick = (pickedDate: any) => {
     const splitDate = pickedDate!.toString().split(" ");
-    //console.log(splitDate);
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const date = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-    console.log(date);
     this.setState({dateString: date});
     this.disableUnavailableSeatings(date);
 
@@ -231,12 +268,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.createOrder(guestId);
 
   }
-
   render() {
     return (
       <main>
         <h1 className="booking__heading">Boka</h1>
-
         <section className="booking__guests">
           <select onChange={this.setSeats}
             value={this.state.seats}>
@@ -248,15 +283,14 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
             <option value="6">6 personer</option>
           </select>
         </section>
-
         <section className="booking__calendar">
           <Calendar
             onChange={this.datePick}
             onActiveDateChange={this.disableUnavailableDates}
             value={this.state.date}
+            minDate= {new Date()}
           />
         </section>
-
         <section className="booking__form">
           <FormComponent 
           formSubmit={this.handleForm} />
