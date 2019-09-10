@@ -198,8 +198,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.submitBooking();
   }
 
-  createOrder(customerId: string){
-    axios({
+  async createOrder(customerId: string){
+    await axios({
       method: "POST",
       url: "http://localhost:8888/order/create.php",
       data: JSON.stringify({
@@ -240,7 +240,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   async checkIfGuestAlreadyExists(): Promise<boolean> {
     let res;
-     await axios({
+    await axios({
       method: "GET",
       url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
     })
@@ -254,7 +254,22 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     } else {
       return true;
     }
-    
+  }
+
+  sendEmail() {
+    let dateForEmail = this.state.dateString.split(" ");
+    axios({
+      method: "POST",
+      url: "http://localhost:8888/email/sendEmail.php",
+      data: JSON.stringify({
+        first_name: this.state.form.firstName,
+        last_name: this.state.form.lastName,
+        email: this.state.form.emailAddress,
+        date: dateForEmail[0],
+        time: this.state.form.time,
+        seats: this.state.seats
+      })
+    })
   }
 
   submitBooking = async () => {
@@ -265,8 +280,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       await this.createGuest();
     }
     guestId = await this.getGuestId();
-    this.createOrder(guestId);
-
+    await this.createOrder(guestId);
+    this.sendEmail();
   }
   render() {
     return (
