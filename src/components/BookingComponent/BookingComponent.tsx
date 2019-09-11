@@ -61,12 +61,17 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
 
-  componentDidMount() {
+  async componentDidMount() {
     const label = document.querySelectorAll(".react-calendar__navigation__label");
     label.forEach(oneLabel => {
       oneLabel.setAttribute("disabled", "true");
     })
-    axios.get("http://localhost:8888/order/readAll.php")
+    await this.readAllOrders();
+    this.disableUnavailableDates();
+  }
+
+  async readAllOrders() {
+    await axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
         let array = this.state.bookings;
         let data:[] = result.data.records;
@@ -74,15 +79,12 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
           array.push(data[i]);
         }
         this.setState({bookings: array});
-      })
-      .then(() => {
-        this.disableUnavailableDates();
       });
   }
 
   
 
-  disableUnavailableDates = () => {
+  disableUnavailableDates() {
     const tiles = document.querySelectorAll(".react-calendar__tile");
     tiles.forEach(tile => {
       const abbr = tile!.firstElementChild;
@@ -114,7 +116,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     let lateCounter = 0;
 
     for(let i = 0; i < this.state.bookings.length; i++) {
-      console.log(this.state.bookings[i]);
+      //console.log(this.state.bookings[i]);
       if(this.state.bookings[i].date === date ) {
         if(this.state.bookings[i].time === "18:00") {
           earlyCounter++;
@@ -144,7 +146,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     //console.log(splitDate);
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const date = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-    console.log(date);
+    //console.log(date);
     this.setState({dateString: date});
     this.disableUnavailableSeatings(date);
 
@@ -197,7 +199,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       }
     )
     .then(function(response){
-      console.log(response);
+      //console.log(response);
     });
   }
 
@@ -208,7 +210,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
     })
     .then(function(response) {
-      console.log(response);
+      //console.log(response);
       res = response;
     })
     .catch(function(){});
