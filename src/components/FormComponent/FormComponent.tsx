@@ -20,6 +20,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
       emailAddress: "",
       phoneNumber: "",
       emailValidation: "",
+      checked: ""
     }
   }
   validate = () => {
@@ -36,18 +37,21 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
   }
 
   handleChange = (e: any) => {
+    this.setState({checked: ""});
     const target = e.target;
     const value = target.value;
     const name = target.name;
+    const checked = target.value;
 
     this.setState({
-      [name]: value
+      [name]: value,
+      checked: checked
     });
   }
 
   createBooking = () => {
     const isValid:any = this.validate();
-    if(isValid) {
+    if(isValid && this.state.checked === "true") {
       console.log(this.state);
       this.props.formSubmit(this.state);
     }
@@ -85,8 +89,10 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
             name="phoneNumber"
             onChange={this.handleChange} required/>
         </li>
-        
-        {/* <input type="checkbox"/> */}
+        <p className="form__gdprInfo" >Vänligen kryssa i rutan nedan för att godkänna att vi lagrar 
+          dina uppgifter enligt GDPR
+        </p>
+        <input type="checkbox" className="form__GDPR" value="true" onChange={this.handleChange}/>
         <input type="button" className="form__submit" value="Boka"
           onClick={this.createBooking} />
       </ul>
@@ -95,10 +101,14 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     }
     return (
       <form id="form">
-        <input type="button" name="time" className="form__timeButton" 
+        <button type="button" name="time" className="form__timeButton" 
           id="earlyButton"
           value="18:00"
-          onClick={this.handleChange} />
+          onClick={this.handleChange}>18:00</button>
+        {/* <input type="button" name="time" className="form__timeButton" 
+          id="earlyButton"
+          value="18:00"
+          onClick={this.handleChange} /> */}
 
         <input type="button" name="time" className="form__timeButton" 
           id="lateButton"

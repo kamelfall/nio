@@ -306,7 +306,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         <div className="confirmSpace">
           <h2>Tack {name} för din bokning!</h2>
           <p>En bekräftelse är påväg till den e-mail du angav.</p>
-          <p>Du har bokat bord den {dateForConfirmation[0]}klockan {time} för {seats} person(er)</p>
+          <p>Du har bokat bord den {dateForConfirmation[0]} klockan {time} för {seats} person(er)</p>
           <p>Vi på restaurang nio ser framemot din vistelse hos oss.</p>
           <p>Ses snart!</p>
           <p>/nio</p>

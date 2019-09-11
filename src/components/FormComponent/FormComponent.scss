@@ -12,15 +12,30 @@
     padding: 1rem;
     margin: 2rem auto;
   }
+  .form__GDPR {
+    margin: 0 auto;
+  }
+  .form__gdprInfo {
+    margin: 1rem;
+  }
 
   .form__timeButton {
-    margin:2rem;
+    background-color: $secondaryColor;
+    border: none;
+    font-size: 1em;
+    width: 200px;
+    margin: 1.5rem;
+    margin-bottom: 0;
     padding: 1rem;
+    
   }
 
   @include tablet {
     .form__submit, .form__timeButton {
       padding: 1rem 2rem;
+    }
+    .form__timeButton {
+      margin: 2rem;
     }
   }
 
