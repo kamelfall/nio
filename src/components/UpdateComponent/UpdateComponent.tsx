@@ -15,7 +15,7 @@ interface IBooking {
 
 interface IUpdateProps {
   booking: IBooking,
-  updateOrder(id: number): void 
+  updateOrder(state:any): void 
 }
 
 interface IUpdateState {
@@ -41,40 +41,45 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
     this.setState({
       [name]: value
     });
+    console.log(value);
   }
 
   updateBooking = () => {
-    // this.props.updateOrder();
+    this.props.updateOrder(this.state);
   }
 
   render() {
 
     return (
       <form id="update">
-        <ul className="form__credentials">
-          <li className="form__row">
+        <ul className="update__credentials">
+          <li className="update__row">
             <label htmlFor="firstName">Namn:</label>
-            <input type="text" className="form__textbox" 
+            <input type="text" className="update__textbox" 
               name="firstName" 
-              onChange={this.handleChange} 
+              onSubmit={this.handleChange} 
+              defaultValue={this.props.booking.first_name}
               pattern="[a-z]\w{4,}\d+" required/>
           </li>
-          <li className="form__row">
+          <li className="update__row">
             <label htmlFor="lastName">Efternamn:</label>
-            <input type="text" className="form__textbox" 
+            <input type="text" className="update__textbox" 
               name="lastName" 
-              onChange={this.handleChange} 
+              onSubmit={this.handleChange} 
+              defaultValue={this.props.booking.last_name}
               pattern="[a-z]\w{4,}\d+" required/>
           </li>
-          <li className="form__row">
+          <li className="update__row">
             <label htmlFor="phoneNumber">Telefon:</label>
-            <input type="number" className="form__textbox" 
+            <input type="number" className="update__textbox" 
               name="phoneNumber"
-              onChange={this.handleChange} required/>
+              onSubmit={this.handleChange} 
+              defaultValue={this.props.booking.phone}
+              required/>
           </li>
           
           {/* <input type="checkbox"/> */}
-          <input type="button" className="form__submit" value="Boka"
+          <input type="button" className="update__submit" value="Uppdatera"
             onClick={this.updateBooking} />
         </ul>
       </form>

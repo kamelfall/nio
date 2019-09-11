@@ -55,7 +55,6 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         }
         this.setState({bookings: array});
       })
-      console.log(this.state.bookings);
   }
   adminDeleteOrder(id: number) {
     axios.delete(`http://localhost:8888/order/delete.php?id=${id}`)
@@ -64,16 +63,36 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         this.componentDidMount();
       })
   }
-  adminUpdateOrder(id: number) {
-    this.setState({selectedBooking: this.state.bookings[id]});
+  adminShowUpdate(id: number) {
+    console.log(this.state.bookings);
+    for(let i = 0; i < this.state.bookings.length; i++) {
+      if(this.state.bookings[i].order_id === id) {
+        this.setState({selectedBooking: this.state.bookings[i]});
+        break;
+      }
+    }
   } 
+  adminUpdateOrder() {
+    console.log(this.state.selectedBooking);
+    this.setState({selectedBooking:{
+      customer_id: 0,
+      date: "",
+      email: "",
+      first_name: "",
+      last_name: "",
+      order_id: 0,
+      phone: "",
+      seats: 0,
+      time: ""
+    }})
+  }
 
   public render() {
     let update = <section></section>;
 
     if(this.state.selectedBooking.order_id !== 0) {
       update = <UpdateComponent booking={this.state.selectedBooking} 
-      updateOrder={this.adminUpdateOrder} />
+      updateOrder={this.adminShowUpdate} />
     }
 
     const orders = this.state.bookings;
@@ -85,7 +104,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         <td>{order.first_name} {order.last_name}</td>
         <td>{order.seats}</td>
         <td>{order.email}</td>
-        <button onClick={this.adminUpdateOrder.bind(this, order.order_id)} className="updateOrder" value={order.order_id}>
+        <button onClick={this.adminShowUpdate.bind(this, order.order_id)} className="updateOrder" value={order.order_id}>
         </button>
         <button onClick={this.adminDeleteOrder.bind(this, order.order_id)} className="deleteOrder" value={order.order_id}>
         </button>
@@ -117,6 +136,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         </table>
       </article>
       <section id="update">
+        {update}
       </section>
     </main>
   )}
