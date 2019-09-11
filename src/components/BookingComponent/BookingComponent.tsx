@@ -27,7 +27,8 @@ interface IBookingState {
   dateString: string,
   form: IForm,
   bookings: IBooking[],
-  dateOfToday: []
+  dateOfToday: [],
+  bookingDone: boolean
 }
 
 interface IForm {
@@ -55,6 +56,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       },
       bookings: [],
       dateOfToday: [],
+      bookingDone: false
 
     }
     this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
@@ -196,6 +198,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   handleBooking = () => {
     this.submitBooking();
+    this.setState({bookingDone: true})
   }
 
   async createOrder(customerId: string){
@@ -285,7 +288,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
   render() {
     let booking: any;
-    if (this.handleBooking) {
+    if (this.state.bookingDone === true) {
       booking = 
         <div className="confirmSpace">
           <h2>Tack, "ETT NAMN" för din bokning!</h2>
