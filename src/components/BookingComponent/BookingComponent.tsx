@@ -4,7 +4,6 @@ import axios from 'axios';
 import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
-import { number } from 'prop-types';
 
 interface IBookingProps {
 
@@ -194,11 +193,12 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
+    this.setState({bookingDone: true});
+    console.log();
   }
 
   handleBooking = () => {
     this.submitBooking();
-    this.setState({bookingDone: true})
   }
 
   async createOrder(customerId: string){
@@ -287,19 +287,25 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.sendEmail();
   }
   render() {
+    let name = this.state.form.firstName;
+    let dateForConfirmation = this.state.dateString.split(" ");
+    let time = this.state.form.time;
+    let seats = this.state.seats;
+
     let booking: any;
+
     if (this.state.bookingDone === true) {
       booking = 
         <div className="confirmSpace">
-          <h2>Tack, "ETT NAMN" för din bokning!</h2>
+          <h2>Tack {name} för din bokning!</h2>
           <p>En bekräftelse är påväg till den e-mail du angav.</p>
-          <p>Du har bokat bord den "ETT DATUM" klockan "TID" för "ANTAL PERSONER"></p>
+          <p>Du har bokat bord den {dateForConfirmation[0]}klockan {time} för {seats} person(er)</p>
           <p>Vi på restaurang nio ser framemot din vistelse hos oss.</p>
           <p>Ses snart!</p>
           <p>/nio</p>
-          <p className="finstilta">Om du önskar att ändra eller avboka din bordsbokning så är det bara 
-            att höra av sig till oss på +46(0) 820 50 10
-          </p>
+          <p className="finstilta">Om du önskar att ändra eller avboka din bordsbokning så är det bara</p>
+          <p className="finstilta">att höra av sig till oss på +46(0) 820 50 10</p>
+
         </div>
     }else {
       booking =
