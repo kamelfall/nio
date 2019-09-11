@@ -1,7 +1,6 @@
 import * as React from "react";
 import "./AdminComponent.scss";
 import axios from 'axios';
-import moment from 'moment';
 
 interface IBooking {
   customer_id: number,
@@ -14,10 +13,8 @@ interface IBooking {
   seats: number,
   time: string
 }
-
 interface IBookingState {
   bookings: IBooking[],
-  bookingNr: number,
 }
 
 class AdminComponent extends React.Component<{}, IBookingState> {
@@ -26,7 +23,6 @@ class AdminComponent extends React.Component<{}, IBookingState> {
 
     this.state = {
       bookings: [],
-      bookingNr: 0,
     }
     this.handleChange = this.handleChange.bind(this);
     this.adminDeleteOrder = this.adminDeleteOrder.bind(this);
@@ -42,10 +38,8 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         }
         this.setState({bookings: array});
       })
-      console.log(this.state.bookings);
   }
   adminDeleteOrder(id: number) {
-    this.setState({bookingNr: id})
     axios.delete(`http://localhost:8888/order/delete.php?id=${id}`)
       .then((result: any) => {
         console.log(result);
@@ -54,7 +48,6 @@ class AdminComponent extends React.Component<{}, IBookingState> {
   }
 
   handleChange(event: any){
-    console.log(event.target.value);
     this.setState({bookings:[]})
     axios({
       method: "GET",
@@ -62,55 +55,56 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     })
     .then((result: any) => {
       let array = this.state.bookings;
-        let data:[] = result.data.records;
-        for(let i = 0; i < data.length; i++) {
-          array.push(data[i]);
-        }
-        console.log(array);
-        this.setState({bookings: array});
+      let data:[] = result.data.records;
+
+      for(let i = 0; i < data.length; i++) {
+        array.push(data[i]);
+      }
+      this.setState({bookings: array});
     })
   }
-
   public render() {
-
     const orders = this.state.bookings;
     const mappedOrders = orders.map(order => 
-      <tr>
+      <tr key={order.order_id}>
         <td>{order.order_id}</td>
         <td>{order.date}</td>
         <td>{order.time}</td>
         <td>{order.first_name} {order.last_name}</td>
         <td>{order.seats}</td>
         <td>{order.email}</td>
-        <button onClick={this.adminDeleteOrder.bind(this, order.order_id)} className="deleteOrder" value={order.order_id}>
-        </button>
+        <td><button onClick={this.adminDeleteOrder.bind(this, order.order_id)} className="deleteOrder" value={order.order_id}>
+        </button></td>
+        <td><button></button></td>
       </tr>)
     
     return (
-    <main id="admin">
-      <section>
-        <h2 className="admin__h2">Bookings</h2>
-        <input  className="admin__input" type="text" placeholder="Sök på bokningsnummer eller efternamn" onChange={this.handleChange}/>
-      </section>
-      <article>
-        <table>
-          <thead>
-            <tr>
-              <th>Bookingnr</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Name</th>
-              <th>Seats</th>
-              <th>Email</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-           {mappedOrders}
-          </tbody>
-        </table>
-      </article>
-    </main>
-  )}
+      <main id="admin">
+        <section>
+          <h2 className="admin__h2">Bookings</h2>
+          <input  className="admin__input" type="text" placeholder="Sök på bokningsnummer eller efternamn" onChange={this.handleChange}/>
+        </section>
+        <article>
+          <table>
+            <thead>
+              <tr>
+                <th>Bookingnr</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Name</th>
+                <th>Seats</th>
+                <th>Email</th>
+                <th>Delete</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {mappedOrders}
+            </tbody>
+          </table>
+        </article>
+      </main>
+    )
+  }
 }
 export default AdminComponent;
