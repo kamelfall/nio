@@ -7,7 +7,6 @@
   background-position: 75%;
   color: white;
   overflow: auto;
-  
   p {
     margin: 50vh auto 0 auto;
     font-size: 4rem;
@@ -22,47 +21,74 @@
     }
   }
 }
-
 .menuInformation {
   background-color: $secondaryColor;
   min-height: 10rem;
   overflow: auto;
   padding: 1rem;
   box-sizing: border-box;
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.75rem;
-}
 
+  @include desktop {
+    padding: 1rem 20rem;
+    font-size: 1.2rem;
+  }
+  h3 {
+    color: $primaryColor;
+    letter-spacing: 5px;
+  }
+  p {
+    color: $primaryColor;
+    letter-spacing: 2px;
+    font-family: $textFont;
+  }
+}
 .restaurantMenu {
   background-color: $primaryColor;
-  height: 30rem;
+  height: auto;
   overflow: auto;
-  color: white;
+  padding: 1rem;
 
   h2 {
     margin-top: 2rem;
+    font-size: 2rem;
+    color: $calendarColor;
+    letter-spacing: 6px;
   }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
+  h4 {
+    color: $calendarColor;
+    padding-bottom: 5px;
+    border-bottom: 3px dotted $calendarColor;
     display: inline-block;
-    margin: 1rem auto 2rem auto;
-    text-align: left;
-
-    li {
-      margin-bottom: 1rem;
-    }
+    margin-bottom: 0;
   }
-
+  p {
+    color: $calendarColor;
+  }
+  .menuItem {
+    margin-bottom: 1rem;
+  }
+  .menuItemSide {
+    margin-top: 3rem;
+    border: 3px dotted $calendarColor;
+    display: inline-block;
+    padding: 1rem;
+  }
   .restaurantMenu__button {
-    background-color: $secondaryColor2;
+    background-color: $primaryColor;
+    border: 1px solid $secondaryColor;
+    color: $secondaryColor;
     height: 4rem;
     width: 10rem;
     line-height: 4rem;
-    color: black;
-    margin: 0 auto;
+    margin: 3rem auto;
     cursor: pointer;
+  }
+  .restaurantMenu__button:hover {
+    background-color: $secondaryColor;
+    border: 1px solid $primaryColor;
+    color: $primaryColor;
   }
 
 }
