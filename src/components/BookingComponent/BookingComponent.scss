@@ -2,7 +2,9 @@
 
 #booking {
   background-color: $primaryColor;
-  padding-top: 1rem;
+  // padding-top: 1rem;
+  flex: 1;
+  padding: 8rem 0;
 
   .booking__heading {
     color: #fff;
@@ -47,4 +49,19 @@
       color: #fff;
     }
   }
+}
+.confirmSpace {
+  margin-top: 2em;
+  background-color: $secondaryColor;
+  width: 60%;
+  margin: 0 auto;
+
+  p {
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    margin: 2em;
+  }
+  .finstilta {
+    font-size: 0.8em;
+  } 
 }

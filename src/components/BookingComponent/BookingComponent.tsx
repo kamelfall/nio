@@ -4,7 +4,6 @@ import axios from 'axios';
 import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
-import { number } from 'prop-types';
 
 interface IBookingProps {
 
@@ -27,7 +26,8 @@ interface IBookingState {
   dateString: string,
   form: IForm,
   bookings: IBooking[],
-  dateOfToday: []
+  dateOfToday: [],
+  bookingDone: boolean
 }
 
 interface IForm {
@@ -55,6 +55,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       },
       bookings: [],
       dateOfToday: [],
+      bookingDone: false
 
     }
     this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
@@ -97,7 +98,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-      // console.log(trimmedDate);
+      
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
         if(this.state.bookings[i].date === yearMonthDateTime) {
@@ -197,6 +198,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
+    this.setState({bookingDone: true});
+    console.log();
   }
 
   handleBooking = () => {
@@ -291,33 +294,58 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   }
   render() {
+    let name = this.state.form.firstName;
+    let dateForConfirmation = this.state.dateString.split(" ");
+    let time = this.state.form.time;
+    let seats = this.state.seats;
+
+    let booking: any;
+
+    if (this.state.bookingDone === true) {
+      booking = 
+        <div className="confirmSpace">
+          <h2>Tack {name} för din bokning!</h2>
+          <p>En bekräftelse är påväg till den e-mail du angav.</p>
+          <p>Du har bokat bord den {dateForConfirmation[0]}klockan {time} för {seats} person(er)</p>
+          <p>Vi på restaurang nio ser framemot din vistelse hos oss.</p>
+          <p>Ses snart!</p>
+          <p>/nio</p>
+          <p className="finstilta">Om du önskar att ändra eller avboka din bordsbokning så är det bara</p>
+          <p className="finstilta">att höra av sig till oss på +46(0) 820 50 10</p>
+
+        </div>
+    }else {
+      booking =
+        <div>
+          <h1 className="booking__heading">Boka</h1>
+          <section className="booking__guests">
+            <select onChange={this.setSeats}
+              value={this.state.seats}>
+              <option value="1">1 person</option>
+              <option value="2">2 personer</option>
+              <option value="3">3 personer</option>
+              <option value="4">4 personer</option>
+              <option value="5">5 personer</option>
+              <option value="6">6 personer</option>
+            </select>
+          </section>
+          <section className="booking__calendar">
+            <Calendar
+              onChange={this.datePick}
+              onActiveDateChange={this.disableUnavailableDates}
+              value={this.state.date}
+              minDate= {new Date()}
+            />
+          </section>
+          <section className="booking__form">
+            <FormComponent 
+            formSubmit={this.handleForm} />
+          </section>
+        </div>
+    }
     return (
       <main id="booking">
-        <h1 className="booking__heading">Boka</h1>
-        <section className="booking__guests">
-          <select onChange={this.setSeats}
-            value={this.state.seats}>
-            <option value="1">1 person</option>
-            <option value="2">2 personer</option>
-            <option value="3">3 personer</option>
-            <option value="4">4 personer</option>
-            <option value="5">5 personer</option>
-            <option value="6">6 personer</option>
-          </select>
-        </section>
-        <section className="booking__calendar">
-          <Calendar
-            onChange={this.datePick}
-            onActiveDateChange={this.disableUnavailableDates}
-            value={this.state.date}
-            minDate= {new Date()}
-          />
-        </section>
-        <section className="booking__form">
-          <FormComponent 
-          formSubmit={this.handleForm} />
-        </section>
-
+        {booking}
       </main>
     );
   }
