@@ -9,7 +9,7 @@ import { number } from 'prop-types';
 interface IBookingProps {
 
 }
-interface IBooking {
+export interface IBooking {
   customer_id: number,
   date: string,
   email: string,
