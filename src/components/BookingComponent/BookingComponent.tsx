@@ -64,12 +64,17 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
 
-  componentDidMount() {
+  async componentDidMount() {
     const label = document.querySelectorAll(".react-calendar__navigation__label");
     label.forEach(oneLabel => {
       oneLabel.setAttribute("disabled", "true");
     })
-    axios.get("http://localhost:8888/order/readAll.php")
+    await this.readAllOrders();
+    this.disableUnavailableDates();
+  }
+
+  async readAllOrders() {
+    await axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
         let array = this.state.bookings;
         let data:[] = result.data.records;
@@ -77,13 +82,12 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
           array.push(data[i]);
         }
         this.setState({bookings: array});
-      })
-      .then(() => {
-        this.disableUnavailableDates();
-        // this.deleteOrdersWithPassedDate();  
       });
   }
-  disableUnavailableDates = () => {
+
+  
+
+  disableUnavailableDates() {
     const tiles = document.querySelectorAll(".react-calendar__tile");
     tiles.forEach(tile => {
       const abbr = tile!.firstElementChild;
@@ -182,6 +186,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     const splitDate = pickedDate!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const date = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+    
     this.setState({dateString: date});
     this.disableUnavailableSeatings(date);
 
@@ -234,7 +239,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       }
     )
     .then(function(response){
-      console.log(response);
+      //console.log(response);
     });
   }
 
@@ -245,7 +250,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
     })
     .then(function(response) {
-      console.log(response);
+      //console.log(response);
       res = response;
     })
     .catch(function(){});
@@ -280,8 +285,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       await this.createGuest();
     }
     guestId = await this.getGuestId();
+
     await this.createOrder(guestId);
     this.sendEmail();
+
   }
   render() {
     return (
