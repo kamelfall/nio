@@ -28,7 +28,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       bookings: [],
       bookingNr: 0,
     }
-
+    this.handleChange = this.handleChange.bind(this);
     this.adminDeleteOrder = this.adminDeleteOrder.bind(this);
   }
   componentDidMount() {
@@ -52,6 +52,25 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         this.componentDidMount();
       })
   }
+
+  handleChange(event: any){
+    console.log(event.target.value);
+    this.setState({bookings:[]})
+    axios({
+      method: "GET",
+      url: "http://localhost:8888/order/search.php?s=" + event.target.value,
+    })
+    .then((result: any) => {
+      let array = this.state.bookings;
+        let data:[] = result.data.records;
+        for(let i = 0; i < data.length; i++) {
+          array.push(data[i]);
+        }
+        console.log(array);
+        this.setState({bookings: array});
+    })
+  }
+
   public render() {
 
     const orders = this.state.bookings;
@@ -71,7 +90,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     <main id="admin">
       <section>
         <h2 className="admin__h2">Bookings</h2>
-        <input  className="admin__input" type="text" placeholder="Bookingnr"/>
+        <input  className="admin__input" type="text" placeholder="Sök på bokningsnummer eller efternamn" onChange={this.handleChange}/>
       </section>
       <article>
         <table>
