@@ -1,8 +1,6 @@
 @import '../../styles/style.scss';
 
 footer {
-  // display: block;
-  border: 1px solid white;
   height: 150px;
   flex: 1;
   background-color: $secondaryColor;
@@ -45,6 +43,13 @@ a:link {
     width: 30%;
     text-align: right;
     align-self: center;
+    color: white;
+    a {
+      border-bottom: 1px solid white;
+    }
+    a:visited {
+      color: white;
+    }
   }
 }
 @include desktop {

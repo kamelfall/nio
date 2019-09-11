@@ -33,6 +33,10 @@ class HomeComponent extends React.Component<{}, {}> {
             <p>Shiitake svamp, koriansk bbq-sås, picklad chili,</p>
           </div>
           <div className="menuItem">
+            <h4>Tonfisk Bao (v)</h4>
+            <p>Soyamarinerad tonfisktartar, savoykål, pciklade morötter, koriander</p>
+          </div>
+          <div className="menuItem">
             <h4>Tofu Bao (v)</h4>
             <p>Pankofritera soyamarinerad tofu, picklad rödkål, chili mayo, vårlök</p>
           </div>
@@ -40,7 +44,7 @@ class HomeComponent extends React.Component<{}, {}> {
             <p>Syrad kålsallad, kimchi, edamamebönor, rostade mandlar</p>
             <p>serveras som små sidorätter</p>
           </div>
-          <div className="restaurantMenu__button">Boka bord</div>
+          <a href="/booking"><div className="restaurantMenu__button">Boka bord</div></a>
         </section>
       </main>
     );
