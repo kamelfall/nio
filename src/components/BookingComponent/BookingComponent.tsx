@@ -187,7 +187,11 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
     let previousForm = {...this.state.form};
     previousForm.time = "";
     this.setState({form: previousForm});
+
+    this.setTimeButtonStyling();
   }
+
+
 
   // When submitting form, form-information is set to state,
   // submitBooking runs and bookingDone is set to true so that
@@ -195,7 +199,6 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
   handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
     this.setState({bookingDone: true});
-    console.log();
   }
 
   handleBooking = () => {
@@ -292,8 +295,15 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
     guestId = await this.getGuestId();
     await this.createOrder(guestId);
     this.sendEmail();
-
   }
+
+  setTimeButtonStyling(){
+    let earlyButton = document.getElementById('earlyButton');
+    let lateButton = document.getElementById('lateButton');
+    earlyButton!.classList.remove('form__timebutton--active')
+    lateButton!.classList.remove('form__timebutton--active')
+  }
+
   render() {
     let name = this.state.form.firstName;
     let dateForConfirmation = this.state.dateString.split(" ");
@@ -342,7 +352,7 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
           <section className="booking__form">
             <FormComponent 
             formSubmit={this.handleForm}
-             pickedDate={this.state.dateString} />
+             pickedDate={this.state.dateString}/>
           </section>
         </div>
     }
