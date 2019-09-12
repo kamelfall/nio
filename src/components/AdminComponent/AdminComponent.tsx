@@ -2,7 +2,6 @@ import * as React from "react";
 import "./AdminComponent.scss";
 import UpdateComponent from "../UpdateComponent/UpdateComponent";
 import axios from 'axios';
-import moment from 'moment';
 
 export interface IBooking {
   customer_id: number,
@@ -15,7 +14,6 @@ export interface IBooking {
   seats: number,
   time: string
 }
-
 
 interface IBookingState {
   bookings: IBooking[],
@@ -42,7 +40,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         time: ""
       }
     }
-
+    this.handleChange = this.handleChange.bind(this);
     this.adminDeleteOrder = this.adminDeleteOrder.bind(this);
     this.adminUpdateOrder = this.adminUpdateOrder.bind(this);
   }
@@ -58,6 +56,24 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         this.setState({bookings: array});
       })
   }
+  
+  handleChange(event: any){
+    this.setState({bookings:[]})
+    axios({
+      method: "GET",
+      url: "http://localhost:8888/order/search.php?s=" + event.target.value,
+    })
+    .then((result: any) => {
+      let array = this.state.bookings;
+      let data:[] = result.data.records;
+
+      for(let i = 0; i < data.length; i++) {
+        array.push(data[i]);
+      }
+      this.setState({bookings: array});
+    })
+  }
+  
   adminDeleteOrder(id: number) {
     axios.delete(`http://localhost:8888/order/delete.php?id=${id}`)
       .then((result: any) => {
@@ -141,13 +157,14 @@ class AdminComponent extends React.Component<{}, IBookingState> {
 
     const orders = this.state.bookings;
     const mappedOrders = orders.map(order => 
-      <tr>
+      <tr key={order.order_id}>
         <td>{order.order_id}</td>
         <td>{order.date}</td>
         <td>{order.time}</td>
         <td>{order.first_name} {order.last_name}</td>
         <td>{order.seats}</td>
         <td>{order.email}</td>
+                                      
         <button onClick={this.adminShowUpdate.bind(this, order.order_id)} className="updateOrder" value={order.order_id}>
         </button>
         <button onClick={this.adminDeleteOrder.bind(this, order.order_id)} className="deleteOrder" value={order.order_id}>
@@ -159,7 +176,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     <main id="admin">
       <section>
         <h2 className="admin__h2">Bookings</h2>
-        <input  className="admin__input" type="text" placeholder="Bookingnr"/>
+        <input  className="admin__input" type="text" placeholder="Sök på bokningsnummer eller efternamn" onChange={this.handleChange}/>
       </section>
       <article>
         <table>

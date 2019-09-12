@@ -4,7 +4,6 @@ import axios from 'axios';
 import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
-import { number } from 'prop-types';
 
 interface IBookingProps {
 
@@ -27,7 +26,8 @@ interface IBookingState {
   dateString: string,
   form: IForm,
   bookings: IBooking[],
-  dateOfToday: []
+  bookingDone: boolean,
+  gdprInfoVisible: boolean
 }
 
 interface IForm {
@@ -54,7 +54,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         phoneNumber: ""
       },
       bookings: [],
-      dateOfToday: [],
+      bookingDone: false,
+      gdprInfoVisible: false
 
     }
     this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
@@ -64,12 +65,35 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
 
-  componentDidMount() {
+  async componentDidMount() {
     const label = document.querySelectorAll(".react-calendar__navigation__label");
     label.forEach(oneLabel => {
       oneLabel.setAttribute("disabled", "true");
     })
-    axios.get("http://localhost:8888/order/readAll.php")
+    await this.readAllOrders();
+    this.disableUnavailableDates();
+    let todaysDate = moment().format("YYYY-MM-DD") + " 00:00:00";
+    if(this.isTodayAvailable(todaysDate)){
+      this.setState({dateString: todaysDate})
+    }
+    this.disableUnavailableSeatings(todaysDate);
+  }
+
+  isTodayAvailable(todaysDate: string): boolean{
+    let counter = 0;
+      for(let i = 0; i < this.state.bookings.length; i++) {
+        if(this.state.bookings[i].date === todaysDate) {
+          counter++;
+          if(counter >= 2) {
+            return false;
+          }
+        }
+      }
+    return true;
+  }
+
+  async readAllOrders() {
+    await axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
         let array = this.state.bookings;
         let data:[] = result.data.records;
@@ -77,13 +101,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
           array.push(data[i]);
         }
         this.setState({bookings: array});
-      })
-      .then(() => {
-        this.disableUnavailableDates();
-        // this.deleteOrdersWithPassedDate();  
       });
   }
-  disableUnavailableDates = () => {
+
+  disableUnavailableDates() {
     const tiles = document.querySelectorAll(".react-calendar__tile");
     tiles.forEach(tile => {
       const abbr = tile!.firstElementChild;
@@ -93,7 +114,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-      // console.log(trimmedDate);
+      
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
         if(this.state.bookings[i].date === yearMonthDateTime) {
@@ -107,47 +128,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       }
     })
   }
-  // deleteOrdersWithPassedDate() {
-  //   var todaysDate = moment().format("YYYY-MM-DD");
-
-  //   const splitDate = todaysDate!.split("-");
-  //   const newDate1 = parseInt(splitDate[0]);
-  //   const newDate2 = parseInt(splitDate[1]);
-  //   const newDate3 = parseInt(splitDate[2]);
-
-  //   const todaysDateNew = [];
-  //   todaysDateNew.push(newDate1, newDate2, newDate3);
-  //   // todaysDateNew.push(newDate2);
-  //   // todaysDateNew.push(newDate3);
-  //   console.log(todaysDateNew);
-
-  //   axios.get("http://localhost:8888/order/readAll.php")
-  //     .then((result: any) => {
-  //       let data:[] = result.data.records;
-  //       const formerDates = [];
-
-  //       for(let i = 0; i < data.length; i++) {
-  //         const passedReservations = this.state.bookings[i].date;
-  //         const splitDate = passedReservations!.split(" ");
-  //         const separateDate = splitDate[0];
-  //         const separate2 = separateDate!.split("-");
-
-  //         const sep1 = parseInt(separate2[0]);
-  //         const sep2 = parseInt(separate2[1]);
-  //         const sep3 = parseInt(separate2[2]);
-  //         formerDates.push(sep1, sep2, sep3);
-  //         // console.log(formerDates);
-  //       }
-
-  //     })
-  //     // var a = moment(todaysDateNew);
-  //     //   var b = moment(formerDates);
-  //     //   let difference = a.diff(b, 'days');
-  //     //   // var duration = moment.duration(todaysDateNew.diff(formerDates))
-  //     //   console.log(difference);
-
-  // }
-
   disableUnavailableSeatings = (date:any) => {
     document.getElementById("earlyButton")!.removeAttribute("disabled");
     document.getElementById("lateButton")!.removeAttribute("disabled");
@@ -182,6 +162,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     const splitDate = pickedDate!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const date = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+    
     this.setState({dateString: date});
     this.disableUnavailableSeatings(date);
 
@@ -192,11 +173,16 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
 
   handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
+    this.setState({bookingDone: true});
+    console.log();
   }
 
   handleBooking = () => {
     this.submitBooking();
   }
+  toggleGdpr = () => {
+    this.setState(prevState => ({gdprInfoVisible: !prevState.gdprInfoVisible}))
+  };
 
   async createOrder(customerId: string){
     await axios({
@@ -234,7 +220,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       }
     )
     .then(function(response){
-      console.log(response);
+      //console.log(response);
     });
   }
 
@@ -245,7 +231,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
     })
     .then(function(response) {
-      console.log(response);
+      //console.log(response);
       res = response;
     })
     .catch(function(){});
@@ -280,37 +266,66 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       await this.createGuest();
     }
     guestId = await this.getGuestId();
+
     await this.createOrder(guestId);
     this.sendEmail();
+
   }
   render() {
+    let name = this.state.form.firstName;
+    let dateForConfirmation = this.state.dateString.split(" ");
+    let time = this.state.form.time;
+    let seats = this.state.seats;
+  
+
+    let booking: any;
+
+    if (this.state.bookingDone === true) {
+      booking = 
+        <div className="confirmSpace">
+          <h2>Tack {name} för din bokning!</h2>
+          <p>En bekräftelse är påväg till den e-mail du angav.</p>
+          <p>Du har bokat bord den {dateForConfirmation[0]} klockan {time} för {seats} person(er)</p>
+          <p>Vi på restaurang nio ser framemot din vistelse hos oss.</p>
+          <p>Ses snart!</p>
+          <p>/nio</p>
+          <p className="finstilta">Om du önskar att ändra eller avboka din bordsbokning så är det bara</p>
+          <p className="finstilta">att höra av sig till oss på +46(0) 820 50 10</p>
+
+        </div>
+    }else {
+      booking =
+        <div>
+          <h1 className="booking__heading">Boka</h1>
+          <section className="booking__guests">
+            <select onChange={this.setSeats}
+              value={this.state.seats}>
+              <option value="1">1 person</option>
+              <option value="2">2 personer</option>
+              <option value="3">3 personer</option>
+              <option value="4">4 personer</option>
+              <option value="5">5 personer</option>
+              <option value="6">6 personer</option>
+            </select>
+          </section>
+          <section className="booking__calendar">
+            <Calendar
+              onChange={this.datePick}
+              onActiveDateChange={this.disableUnavailableDates}
+              value={this.state.date}
+              minDate= {new Date()}
+            />
+          </section>
+          <section className="booking__form">
+            <FormComponent 
+            formSubmit={this.handleForm}
+             pickedDate={this.state.dateString} />
+          </section>
+        </div>
+    }
     return (
       <main id="booking">
-        <h1 className="booking__heading">Boka</h1>
-        <section className="booking__guests">
-          <select onChange={this.setSeats}
-            value={this.state.seats}>
-            <option value="1">1 person</option>
-            <option value="2">2 personer</option>
-            <option value="3">3 personer</option>
-            <option value="4">4 personer</option>
-            <option value="5">5 personer</option>
-            <option value="6">6 personer</option>
-          </select>
-        </section>
-        <section className="booking__calendar">
-          <Calendar
-            onChange={this.datePick}
-            onActiveDateChange={this.disableUnavailableDates}
-            value={this.state.date}
-            minDate= {new Date()}
-          />
-        </section>
-        <section className="booking__form">
-          <FormComponent 
-          formSubmit={this.handleForm} />
-        </section>
-
+        {booking}
       </main>
     );
   }
