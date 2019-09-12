@@ -28,17 +28,16 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
 
     const customer_idString = this.props.booking.customer_id.toString();
     const order_idString = this.props.booking.order_id.toString();
-    const seatsString = this.props.booking.seats.toString();
 
     this.state = {
       first_name: "",
       last_name: "",
       phone: "",
+      seats: "",
+      email: "",
       customer_id: customer_idString,
       date: this.props.booking.date,
-      email: this.props.booking.email,
       order_id: order_idString,
-      seats: seatsString,
       time: this.props.booking.time
     }
   }
@@ -54,7 +53,7 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
     console.log(value);
   }
 
-  updateBooking = () => {
+  updateCredentials = () => {
     let editState = {...this.state};
     if(this.state.first_name === "") {
       editState.first_name = this.props.booking.first_name;
@@ -64,6 +63,12 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
     }
     if(this.state.phone === "") {
       editState.phone = this.props.booking.phone.toString();
+    }
+    if(this.state.seats === "") {
+      editState.seats = this.props.booking.seats.toString();
+    }
+    if(this.state.email === "") {
+      editState.email = this.props.booking.email.toString();
     }
     this.props.updateOrder(editState);
   }
@@ -97,10 +102,26 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
               defaultValue={this.props.booking.phone.toString()}
               required/>
           </li>
-          
-          {/* <input type="checkbox"/> */}
-          <input type="button" className="update__submit" value="Uppdatera"
-            onClick={this.updateBooking} />
+          <li className="update__row">
+            <label htmlFor="email">E-mail:</label>
+            <input type="text" className="update__textbox" 
+              name="email"
+              onChange={this.handleChange} 
+              defaultValue={this.props.booking.email} 
+              pattern="[a-z]\w{4,}\d+" required/>
+          </li>
+          <li className="update__row">
+            <label htmlFor="seats">Platser:</label>
+            <input type="number" className="update__textbox" 
+              name="seats"
+              onChange={this.handleChange} 
+              defaultValue={this.props.booking.seats.toString()} 
+              required/>
+          </li>
+          <li className="update__row">
+            <input type="button" className="update__submit" value="Uppdatera"
+              onClick={this.updateCredentials} />
+          </li>          
         </ul>
       </form>
     );

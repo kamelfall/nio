@@ -65,6 +65,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         this.componentDidMount();
       })
   }
+
   adminShowUpdate(id: number) {
     for(let i = 0; i < this.state.bookings.length; i++) {
       if(this.state.bookings[i].order_id === id) {
@@ -92,18 +93,42 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       seats: seatsInt,
       time: updatedState.time
     }
-    this.setState(upState);
+    this.setState(upState, this.finishUpdate);
+  }
+  finishUpdate() {
     axios({
       method: "PUT",
       url: "http://localhost:8888/order/update.php",
       data: JSON.stringify({
-        first_name: this.state.selectedBooking.first_name,
-        last_name: this.state.selectedBooking.last_name,
-        phone: this.state.selectedBooking.phone,
         seats: this.state.selectedBooking.seats,
         id: this.state.selectedBooking.order_id
       })
-    })
+    });
+    axios({
+      method: "PUT",
+      url: "http://localhost:8888/guest/update.php",
+      data: JSON.stringify({
+        first_name: this.state.selectedBooking.first_name,
+        last_name: this.state.selectedBooking.last_name,
+        phone: this.state.selectedBooking.phone,
+        email: this.state.selectedBooking.email,
+        id: this.state.selectedBooking.customer_id
+      })
+    });
+
+    let resetState = {...this.state};
+    resetState.selectedBooking = {
+      customer_id: 0,
+      date: "",
+      email: "",
+      first_name: "",
+      last_name: "",
+      order_id: 0,
+      phone: 0,
+      seats: 0,
+      time: ""
+    }
+    this.setState(resetState, this.componentDidMount);
   }
 
   render() {
