@@ -22,7 +22,7 @@ import "./NavbarComponent.scss";
             <a href="/"><p>nio</p></a>
             </div>
             <div className="nioLogo">
-              <a href="/"><p className="logo">구</p></a>
+              <a href="/"><p className="logo">九</p></a>
             </div>
             <div className="dropDownMenu">
               <div className="hamburgerMenu" onClick={this.toggleMenu}>
