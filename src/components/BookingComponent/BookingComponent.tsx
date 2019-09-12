@@ -8,7 +8,7 @@ import FormComponent from '../FormComponent/FormComponent';
 interface IBookingProps {
 
 }
-interface IBooking {
+export interface IBooking {
   customer_id: number,
   date: string,
   email: string,
