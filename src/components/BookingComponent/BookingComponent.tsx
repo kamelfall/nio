@@ -5,9 +5,6 @@ import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
 
-interface IBookingProps {
-
-}
 interface IBooking {
   customer_id: number,
   date: string,
@@ -38,7 +35,7 @@ interface IForm {
   phoneNumber: string
 }
 
-export class BookingComponent extends React.Component<IBookingProps, IBookingState> {
+export class BookingComponent extends React.Component<{}, IBookingState> {
   constructor(props: any) {
     super(props);
 
@@ -64,21 +61,26 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     this.createGuest = this.createGuest.bind(this);
   }
 
-
   async componentDidMount() {
+    // Switch-century-function on react-calendar is disabled
     const label = document.querySelectorAll(".react-calendar__navigation__label");
     label.forEach(oneLabel => {
       oneLabel.setAttribute("disabled", "true");
     })
+    // Gets all orders through API
     await this.readAllOrders();
+    // Disables fully booked dates in calendar
     this.disableUnavailableDates();
+    // Picks todays date in calendar as default unless it is fully booked
     let todaysDate = moment().format("YYYY-MM-DD") + " 00:00:00";
     if(this.isTodayAvailable(todaysDate)){
       this.setState({dateString: todaysDate})
     }
+    // Disables unavailable seating for todays date
     this.disableUnavailableSeatings(todaysDate);
   }
 
+  // Counts amount of bookings on todays date to determine if it is fully booked
   isTodayAvailable(todaysDate: string): boolean{
     let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
@@ -92,6 +94,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     return true;
   }
 
+  //Gets all orders and saves them in state
   async readAllOrders() {
     await axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
@@ -105,18 +108,21 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
   
-
   disableUnavailableDates() {
+    // Creates a collections of all tiles in react-calendar
     const tiles = document.querySelectorAll(".react-calendar__tile");
+    // Loops through them and find the corresponding date
     tiles.forEach(tile => {
       const abbr = tile!.firstElementChild;
       const date = abbr!.getAttribute("aria-label");
 
+      // Changes format of date in the tile's label
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
       const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
       
+      // Disables the tile if the corresponfing date is fully booked
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
         if(this.state.bookings[i].date === yearMonthDateTime) {
@@ -130,48 +136,11 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       }
     })
   }
-  // deleteOrdersWithPassedDate() {
-  //   var todaysDate = moment().format("YYYY-MM-DD");
 
-  //   const splitDate = todaysDate!.split("-");
-  //   const newDate1 = parseInt(splitDate[0]);
-  //   const newDate2 = parseInt(splitDate[1]);
-  //   const newDate3 = parseInt(splitDate[2]);
-
-  //   const todaysDateNew = [];
-  //   todaysDateNew.push(newDate1, newDate2, newDate3);
-  //   // todaysDateNew.push(newDate2);
-  //   // todaysDateNew.push(newDate3);
-  //   console.log(todaysDateNew);
-
-  //   axios.get("http://localhost:8888/order/readAll.php")
-  //     .then((result: any) => {
-  //       let data:[] = result.data.records;
-  //       const formerDates = [];
-
-  //       for(let i = 0; i < data.length; i++) {
-  //         const passedReservations = this.state.bookings[i].date;
-  //         const splitDate = passedReservations!.split(" ");
-  //         const separateDate = splitDate[0];
-  //         const separate2 = separateDate!.split("-");
-
-  //         const sep1 = parseInt(separate2[0]);
-  //         const sep2 = parseInt(separate2[1]);
-  //         const sep3 = parseInt(separate2[2]);
-  //         formerDates.push(sep1, sep2, sep3);
-  //         // console.log(formerDates);
-  //       }
-
-  //     })
-  //     // var a = moment(todaysDateNew);
-  //     //   var b = moment(formerDates);
-  //     //   let difference = a.diff(b, 'days');
-  //     //   // var duration = moment.duration(todaysDateNew.diff(formerDates))
-  //     //   console.log(difference);
-
-  // }
-
+  // Checks if early or late seating is fully booked for particular date
+  // and disables corresponding button
   disableUnavailableSeatings = (date:any) => {
+    // Resets the buttons in case of clicking several dates
     document.getElementById("earlyButton")!.removeAttribute("disabled");
     document.getElementById("lateButton")!.removeAttribute("disabled");
 
@@ -196,24 +165,34 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     }
   }
 
-  // TODO: HEAVY REFRACTOR
-
+  // Sets amount of seats selcted in in select-element to state
   setSeats = (seatNumber: any) => {
-    this.setState({seats: seatNumber.target.value}, this.handleBooking);
+    this.setState({seats: seatNumber.target.value});
   }
+
+  // Handles clicks on dates in calendar
   datePick = (pickedDate: any) => {
+
+    // Changeing format of date recieved from react-calendar
     const splitDate = pickedDate!.toString().split(" ");
     const realDate = splitDate[3] +"-"+ splitDate[1] +"-"+ splitDate[2];
     const date = moment(realDate, "YYYY-MMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-    
+
+    // When changed the new selected date is set to state
     this.setState({dateString: date});
+
+    // And seatings-buttons are disabled if fully booked
     this.disableUnavailableSeatings(date);
 
+    // Resets time in state
     let previousForm = {...this.state.form};
     previousForm.time = "";
     this.setState({form: previousForm});
   }
 
+  // When submitting form, form-information is set to state,
+  // submitBooking runs and bookingDone is set to true so that
+  // confirmation-content is rendered
   handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
     this.setState({bookingDone: true});
@@ -237,6 +216,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     })
   }
 
+  // Returns id of guest with corresponging email, if existing
   async getGuestId(): Promise<any> {
     return await axios({
       method: "GET",
@@ -259,11 +239,10 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         })
       }
     )
-    .then(function(response){
-      //console.log(response);
-    });
   }
 
+  // Returns true if guest with corresponding email is found in database, 
+  // otherwise returns false
   async checkIfGuestAlreadyExists(): Promise<boolean> {
     let res;
     await axios({
@@ -271,7 +250,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       url: "http://localhost:8888/guest/search.php?s=" + this.state.form.emailAddress
     })
     .then(function(response) {
-      //console.log(response);
       res = response;
     })
     .catch(function(){});
@@ -283,6 +261,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   }
 
   sendEmail() {
+    // Removes hours-minutes-seconds from date-data
     let dateForEmail = this.state.dateString.split(" ");
     axios({
       method: "POST",
@@ -301,12 +280,14 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   submitBooking = async () => {
     let isGuestExisting: boolean;
     let guestId: string;
+    // Checks if guest already exists in database
     isGuestExisting = await this.checkIfGuestAlreadyExists()
+    // If not, creates a new guest
     if(!isGuestExisting){
       await this.createGuest();
     }
+    // Receives id of the guest creating the order to set as foreign key in order
     guestId = await this.getGuestId();
-
     await this.createOrder(guestId);
     this.sendEmail();
 
