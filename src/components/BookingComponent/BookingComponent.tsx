@@ -4,7 +4,6 @@ import axios from 'axios';
 import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
-import { number } from 'prop-types';
 
 interface IBookingProps {
 
@@ -71,6 +70,24 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     })
     await this.readAllOrders();
     this.disableUnavailableDates();
+    let todaysDate = moment().format("YYYY-MM-DD") + " 00:00:00";
+    if(this.isTodayAvailable(todaysDate)){
+      this.setState({dateString: todaysDate})
+    }
+    this.disableUnavailableSeatings(todaysDate);
+  }
+
+  isTodayAvailable(todaysDate: string): boolean{
+    let counter = 0;
+      for(let i = 0; i < this.state.bookings.length; i++) {
+        if(this.state.bookings[i].date === todaysDate) {
+          counter++;
+          if(counter >= 2) {
+            return false;
+          }
+        }
+      }
+    return true;
   }
 
   async readAllOrders() {
@@ -315,7 +332,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         </section>
         <section className="booking__form">
           <FormComponent 
-          formSubmit={this.handleForm} />
+          formSubmit={this.handleForm}
+          pickedDate={this.state.dateString} />
         </section>
 
       </main>
