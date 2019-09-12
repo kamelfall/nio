@@ -28,6 +28,9 @@
       margin: 0 auto;
       width: 60vh;
     }
+    .react-calendar__navigation__label, .react-calendar__navigation__arrow{
+      background-color: $calendarColor;
+    }
     .react-calendar__tile--active {
       background: $selectedColor;
     }
