@@ -1,7 +1,5 @@
 import React from 'react';
 import './FormComponent.scss';
-import { NONAME } from 'dns';
-import { blockStatement } from '@babel/types';
 
 interface IFormProps {
   formSubmit(state:any):void;
@@ -47,11 +45,24 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     const value = target.value;
     const name = target.name;
 
+    
     this.setState({
       [name]: value,
-    });
-  
+    }, this.setTimeButtonStyling);
   }
+
+  setTimeButtonStyling(){
+    let earlyButton = document.getElementById('earlyButton');
+    let lateButton = document.getElementById('lateButton');
+    earlyButton!.classList.remove('form__timebutton--active')
+    lateButton!.classList.remove('form__timebutton--active')
+    if(this.state.time === "18:00") {
+      earlyButton!.classList.add('form__timebutton--active');
+    } else if(this.state.time === "21:00") {
+      lateButton!.classList.add('form__timebutton--active');
+    }
+  }
+
   handleCheckBox = (e: any) => {
     const target = e.target;
     const gdprCheck = target.value;
