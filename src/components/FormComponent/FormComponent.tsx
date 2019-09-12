@@ -3,6 +3,7 @@ import './FormComponent.scss';
 
 interface IFormProps {
   formSubmit(state:any):void;
+  pickedDate: string;
 }
 
 interface IFormState {
@@ -57,7 +58,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     let form = <p></p>;
     const time = this.state.time;
 
-    if(time === "18:00" || time === "21:00") {
+    if((time === "18:00" || time === "21:00") && this.props.pickedDate !== "") {
       form = 
       <ul className="form__credentials">
         <li className="form__row">
