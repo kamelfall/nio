@@ -9,8 +9,13 @@
   }
 
   .form__submit {
+    background-color: $secondaryColor;
+    border: none;
+    font-size: 1em;
+    width: 200px;
+    margin: 0 auto;
+    margin-bottom: 0;
     padding: 1rem;
-    margin: 2rem auto;
   }
   .form__GDPR {
     margin: 0 auto;
@@ -71,6 +76,20 @@
       -webkit-appearance: none;
       margin: 0;
     }
+  }
+  .gdprInfo {
+    margin: 0 auto;
+    width: 90%;
+    padding: 1rem;
+    p {
+      text-align: left;
+    }
+    @include tablet {
+      width: 70%;
+    }
+  }
+  .gdprInfoHidden{
+    display: none;
   }
 }
 .errorMsg {
