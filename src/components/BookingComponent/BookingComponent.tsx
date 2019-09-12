@@ -5,7 +5,7 @@ import moment from 'moment';
 import './BookingComponent.scss';
 import FormComponent from '../FormComponent/FormComponent';
 
-interface IBooking {
+export interface IBooking {
   customer_id: number,
   date: string,
   email: string,
@@ -23,8 +23,8 @@ interface IBookingState {
   dateString: string,
   form: IForm,
   bookings: IBooking[],
-  dateOfToday: [],
-  bookingDone: boolean
+  bookingDone: boolean,
+  gdprInfoVisible: boolean
 }
 
 interface IForm {
@@ -51,8 +51,8 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
         phoneNumber: ""
       },
       bookings: [],
-      dateOfToday: [],
-      bookingDone: false
+      bookingDone: false,
+      gdprInfoVisible: false
 
     }
     this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
@@ -107,7 +107,6 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
       });
   }
 
-  
   disableUnavailableDates() {
     // Creates a collections of all tiles in react-calendar
     const tiles = document.querySelectorAll(".react-calendar__tile");
@@ -202,6 +201,9 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
   handleBooking = () => {
     this.submitBooking();
   }
+  toggleGdpr = () => {
+    this.setState(prevState => ({gdprInfoVisible: !prevState.gdprInfoVisible}))
+  };
 
   async createOrder(customerId: string){
     await axios({
@@ -297,6 +299,7 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
     let dateForConfirmation = this.state.dateString.split(" ");
     let time = this.state.form.time;
     let seats = this.state.seats;
+  
 
     let booking: any;
 
@@ -305,7 +308,7 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
         <div className="confirmSpace">
           <h2>Tack {name} för din bokning!</h2>
           <p>En bekräftelse är påväg till den e-mail du angav.</p>
-          <p>Du har bokat bord den {dateForConfirmation[0]}klockan {time} för {seats} person(er)</p>
+          <p>Du har bokat bord den {dateForConfirmation[0]} klockan {time} för {seats} person(er)</p>
           <p>Vi på restaurang nio ser framemot din vistelse hos oss.</p>
           <p>Ses snart!</p>
           <p>/nio</p>
