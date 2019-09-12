@@ -7,7 +7,7 @@ class HomeComponent extends React.Component<{}, {}> {
     return(
       <main>
         <section className="heroImage">
-          <p>구</p>
+          <p>九</p>
           <h1>nio</h1>
         </section>
         <section className="menuInformation">
@@ -33,7 +33,7 @@ class HomeComponent extends React.Component<{}, {}> {
             <p>Shiitake svamp, koriansk bbq-sås, picklad chili,</p>
           </div>
           <div className="menuItem">
-            <h4>Tonfisk Bao (v)</h4>
+            <h4>Tonfisk Bao</h4>
             <p>Soyamarinerad tonfisktartar, savoykål, pciklade morötter, koriander</p>
           </div>
           <div className="menuItem">
