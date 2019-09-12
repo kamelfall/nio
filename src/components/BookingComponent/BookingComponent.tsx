@@ -26,8 +26,8 @@ interface IBookingState {
   dateString: string,
   form: IForm,
   bookings: IBooking[],
-  dateOfToday: [],
-  bookingDone: boolean
+  bookingDone: boolean,
+  gdprInfoVisible: boolean
 }
 
 interface IForm {
@@ -54,8 +54,8 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         phoneNumber: ""
       },
       bookings: [],
-      dateOfToday: [],
-      bookingDone: false
+      bookingDone: false,
+      gdprInfoVisible: false
 
     }
     this.disableUnavailableDates = this.disableUnavailableDates.bind(this);
@@ -104,8 +104,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       });
   }
 
-  
-
   disableUnavailableDates() {
     const tiles = document.querySelectorAll(".react-calendar__tile");
     tiles.forEach(tile => {
@@ -130,47 +128,6 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
       }
     })
   }
-  // deleteOrdersWithPassedDate() {
-  //   var todaysDate = moment().format("YYYY-MM-DD");
-
-  //   const splitDate = todaysDate!.split("-");
-  //   const newDate1 = parseInt(splitDate[0]);
-  //   const newDate2 = parseInt(splitDate[1]);
-  //   const newDate3 = parseInt(splitDate[2]);
-
-  //   const todaysDateNew = [];
-  //   todaysDateNew.push(newDate1, newDate2, newDate3);
-  //   // todaysDateNew.push(newDate2);
-  //   // todaysDateNew.push(newDate3);
-  //   console.log(todaysDateNew);
-
-  //   axios.get("http://localhost:8888/order/readAll.php")
-  //     .then((result: any) => {
-  //       let data:[] = result.data.records;
-  //       const formerDates = [];
-
-  //       for(let i = 0; i < data.length; i++) {
-  //         const passedReservations = this.state.bookings[i].date;
-  //         const splitDate = passedReservations!.split(" ");
-  //         const separateDate = splitDate[0];
-  //         const separate2 = separateDate!.split("-");
-
-  //         const sep1 = parseInt(separate2[0]);
-  //         const sep2 = parseInt(separate2[1]);
-  //         const sep3 = parseInt(separate2[2]);
-  //         formerDates.push(sep1, sep2, sep3);
-  //         // console.log(formerDates);
-  //       }
-
-  //     })
-  //     // var a = moment(todaysDateNew);
-  //     //   var b = moment(formerDates);
-  //     //   let difference = a.diff(b, 'days');
-  //     //   // var duration = moment.duration(todaysDateNew.diff(formerDates))
-  //     //   console.log(difference);
-
-  // }
-
   disableUnavailableSeatings = (date:any) => {
     document.getElementById("earlyButton")!.removeAttribute("disabled");
     document.getElementById("lateButton")!.removeAttribute("disabled");
@@ -223,6 +180,9 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
   handleBooking = () => {
     this.submitBooking();
   }
+  toggleGdpr = () => {
+    this.setState(prevState => ({gdprInfoVisible: !prevState.gdprInfoVisible}))
+  };
 
   async createOrder(customerId: string){
     await axios({
@@ -316,6 +276,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
     let dateForConfirmation = this.state.dateString.split(" ");
     let time = this.state.form.time;
     let seats = this.state.seats;
+  
 
     let booking: any;
 
@@ -324,7 +285,7 @@ export class BookingComponent extends React.Component<IBookingProps, IBookingSta
         <div className="confirmSpace">
           <h2>Tack {name} för din bokning!</h2>
           <p>En bekräftelse är påväg till den e-mail du angav.</p>
-          <p>Du har bokat bord den {dateForConfirmation[0]}klockan {time} för {seats} person(er)</p>
+          <p>Du har bokat bord den {dateForConfirmation[0]} klockan {time} för {seats} person(er)</p>
           <p>Vi på restaurang nio ser framemot din vistelse hos oss.</p>
           <p>Ses snart!</p>
           <p>/nio</p>
