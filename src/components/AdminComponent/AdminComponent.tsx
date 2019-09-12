@@ -16,6 +16,12 @@ export interface IBooking {
   time: string
 }
 
+interface IUserInfo {
+  first_name: string,
+  last_name: string,
+  phone: number
+}
+
 interface IBookingState {
   bookings: IBooking[],
   bookingNr: number,
@@ -43,6 +49,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     }
 
     this.adminDeleteOrder = this.adminDeleteOrder.bind(this);
+    this.adminUpdateOrder = this.adminUpdateOrder.bind(this);
   }
   componentDidMount() {
     this.setState({bookings:[]})
@@ -64,7 +71,6 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       })
   }
   adminShowUpdate(id: number) {
-    console.log(this.state.bookings);
     for(let i = 0; i < this.state.bookings.length; i++) {
       if(this.state.bookings[i].order_id === id) {
         this.setState({selectedBooking: this.state.bookings[i]});
@@ -72,7 +78,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       }
     }
   } 
-  adminUpdateOrder() {
+  adminUpdateOrder(state: IUserInfo) {
     console.log(this.state.selectedBooking);
     this.setState({selectedBooking:{
       customer_id: 0,
@@ -91,8 +97,14 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     let update = <section></section>;
 
     if(this.state.selectedBooking.order_id !== 0) {
-      update = <UpdateComponent booking={this.state.selectedBooking} 
-      updateOrder={this.adminShowUpdate} />
+      let bookingFormatted = {...this.state.selectedBooking};
+      console.log(bookingFormatted);
+      bookingFormatted.customer_id = bookingFormatted.customer_id.toString();
+      bookingFormatted.order_id = bookingFormatted.order_id.toString();
+      bookingFormatted.seats = bookingFormatted.seats.toString();
+      
+      update = <UpdateComponent booking={this.state.sele} 
+      updateOrder={this.adminUpdateOrder} />
     }
 
     const orders = this.state.bookings;

@@ -2,14 +2,14 @@ import React from 'react';
 import './UpdateComponent.scss';
 
 interface IBooking {
-  customer_id: number,
+  customer_id: string,
   date: string,
   email: string,
   first_name: string,
   last_name: string,
-  order_id: number,
+  order_id: string,
   phone: string,
-  seats: number,
+  seats: string,
   time: string
 }
 
@@ -29,7 +29,12 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
     this.state = {
       firstName: "",
       lastName: "",
-      phoneNumber: ""
+      phoneNumber: "",
+      customer_id: this.props.booking.customer_id,
+      date: this.props.booking.date,
+      email: this.props.booking.email,
+      seats: this.props.booking.seats,
+      time: this.props.booking.time
     }
   }
   
