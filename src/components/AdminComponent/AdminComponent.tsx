@@ -11,16 +11,11 @@ export interface IBooking {
   first_name: string,
   last_name: string,
   order_id: number,
-  phone: string,
+  phone: number,
   seats: number,
   time: string
 }
 
-interface IUserInfo {
-  first_name: string,
-  last_name: string,
-  phone: number
-}
 
 interface IBookingState {
   bookings: IBooking[],
@@ -42,7 +37,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         first_name: "",
         last_name: "",
         order_id: 0,
-        phone: "",
+        phone: 0,
         seats: 0,
         time: ""
       }
@@ -78,32 +73,44 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       }
     }
   } 
-  adminUpdateOrder(state: IUserInfo) {
-    console.log(this.state.selectedBooking);
-    this.setState({selectedBooking:{
-      customer_id: 0,
-      date: "",
-      email: "",
-      first_name: "",
-      last_name: "",
-      order_id: 0,
-      phone: "",
-      seats: 0,
-      time: ""
-    }})
+  adminUpdateOrder(updatedState: any) {
+    let upState = {...this.state};
+
+    const customer_idInt = parseInt(updatedState.customer_id);
+    const order_idInt = parseInt(updatedState.order_id);
+    const phoneInt = parseInt(updatedState.phone);
+    const seatsInt = parseInt(updatedState.seats);
+
+    upState.selectedBooking = {
+      customer_id: customer_idInt,
+      date: updatedState.date,
+      email: updatedState.email,
+      first_name: updatedState.first_name,
+      last_name: updatedState.last_name,
+      order_id: order_idInt,
+      phone: phoneInt,
+      seats: seatsInt,
+      time: updatedState.time
+    }
+    this.setState(upState);
+    axios({
+      method: "PUT",
+      url: "http://localhost:8888/order/update.php",
+      data: JSON.stringify({
+        first_name: this.state.selectedBooking.first_name,
+        last_name: this.state.selectedBooking.last_name,
+        phone: this.state.selectedBooking.phone,
+        seats: this.state.selectedBooking.seats,
+        id: this.state.selectedBooking.order_id
+      })
+    })
   }
 
-  public render() {
+  render() {
     let update = <section></section>;
 
     if(this.state.selectedBooking.order_id !== 0) {
-      let bookingFormatted = {...this.state.selectedBooking};
-      console.log(bookingFormatted);
-      bookingFormatted.customer_id = bookingFormatted.customer_id.toString();
-      bookingFormatted.order_id = bookingFormatted.order_id.toString();
-      bookingFormatted.seats = bookingFormatted.seats.toString();
-      
-      update = <UpdateComponent booking={this.state.sele} 
+      update = <UpdateComponent booking={this.state.selectedBooking} 
       updateOrder={this.adminUpdateOrder} />
     }
 

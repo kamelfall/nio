@@ -2,14 +2,14 @@ import React from 'react';
 import './UpdateComponent.scss';
 
 interface IBooking {
-  customer_id: string,
+  customer_id: number,
   date: string,
   email: string,
   first_name: string,
   last_name: string,
-  order_id: string,
-  phone: string,
-  seats: string,
+  order_id: number,
+  phone: number,
+  seats: number,
   time: string
 }
 
@@ -23,17 +23,22 @@ interface IUpdateState {
 }
 
 export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState> {
-  constructor(props: any) {
+  constructor(props: IUpdateProps) {
     super(props);
 
+    const customer_idString = this.props.booking.customer_id.toString();
+    const order_idString = this.props.booking.order_id.toString();
+    const seatsString = this.props.booking.seats.toString();
+
     this.state = {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      customer_id: this.props.booking.customer_id,
+      first_name: "",
+      last_name: "",
+      phone: "",
+      customer_id: customer_idString,
       date: this.props.booking.date,
       email: this.props.booking.email,
-      seats: this.props.booking.seats,
+      order_id: order_idString,
+      seats: seatsString,
       time: this.props.booking.time
     }
   }
@@ -50,7 +55,17 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
   }
 
   updateBooking = () => {
-    this.props.updateOrder(this.state);
+    let editState = {...this.state};
+    if(this.state.first_name === "") {
+      editState.first_name = this.props.booking.first_name;
+    }
+    if(this.state.last_name === "") {
+      editState.last_name = this.props.booking.last_name;
+    }
+    if(this.state.phone === "") {
+      editState.phone = this.props.booking.phone.toString();
+    }
+    this.props.updateOrder(editState);
   }
 
   render() {
@@ -59,27 +74,27 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
       <form id="update">
         <ul className="update__credentials">
           <li className="update__row">
-            <label htmlFor="firstName">Namn:</label>
+            <label htmlFor="first_name">Namn:</label>
             <input type="text" className="update__textbox" 
-              name="firstName" 
-              onSubmit={this.handleChange} 
+              name="first_name" 
+              onChange={this.handleChange} 
               defaultValue={this.props.booking.first_name}
               pattern="[a-z]\w{4,}\d+" required/>
           </li>
           <li className="update__row">
-            <label htmlFor="lastName">Efternamn:</label>
+            <label htmlFor="last_name">Efternamn:</label>
             <input type="text" className="update__textbox" 
-              name="lastName" 
-              onSubmit={this.handleChange} 
+              name="last_name" 
+              onChange={this.handleChange} 
               defaultValue={this.props.booking.last_name}
               pattern="[a-z]\w{4,}\d+" required/>
           </li>
           <li className="update__row">
-            <label htmlFor="phoneNumber">Telefon:</label>
+            <label htmlFor="phone">Telefon:</label>
             <input type="number" className="update__textbox" 
-              name="phoneNumber"
-              onSubmit={this.handleChange} 
-              defaultValue={this.props.booking.phone}
+              name="phone"
+              onChange={this.handleChange} 
+              defaultValue={this.props.booking.phone.toString()}
               required/>
           </li>
           
