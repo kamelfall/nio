@@ -1,0 +1,73 @@
+@import '../../styles/style.scss';
+
+#booking {
+  background-color: $primaryColor;
+  flex: 1;
+  padding: 8rem 0;
+
+  .booking__heading {
+    color: #fff;
+    margin-top: 3rem;
+  }
+
+  .booking__guests {
+    margin: 4rem auto 3rem;
+
+    select {
+      background-color: $secondaryColor2;
+      height: 4rem;
+      padding: 0 1rem;
+      width: 10rem;
+    }
+  }
+
+  .booking__calendar {
+    .react-calendar {
+      background: $calendarColor;
+      margin: 0 auto;
+      width: 60vh;
+      border: none;
+    }
+    .react-calendar__navigation__label, .react-calendar__navigation__arrow{
+      background-color: $calendarColor;
+      color: black;
+    }
+    .react-calendar__tile--active {
+      background: $selectedColor;
+      color: black;
+    }
+    .react-calendar__tile:hover, .react-calendar__navigation button:hover {
+      background: $hoverColor;
+    }
+
+    @include tablet {
+      .react-calendar {
+        height: auto;
+        width: 70vh;
+      }
+      .react-calendar__tile {
+        padding: 1.1rem 0.75rem;
+      }
+    }
+    .react-calendar__tile:disabled {
+      background-color: $primaryColor;
+      color: #fff;
+    }
+  }
+}
+.confirmSpace {
+  margin-top: 2em;
+  background-color: $secondaryColor;
+  width: 60%;
+  margin: 0 auto;
+  padding: 1rem;
+
+  p {
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    margin: 2em;
+  }
+  .finstilta {
+    font-size: 0.8em;
+  }
+}

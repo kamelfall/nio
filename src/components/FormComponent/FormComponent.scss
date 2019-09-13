@@ -1,0 +1,108 @@
+@import '../../styles/style.scss';
+
+#form {
+  margin: 0 auto;
+
+  .form__textbox, .form__credentials .form__timeButton {
+    background-color: $secondaryColor2;
+    border: none;
+  }
+
+  .form__submit {
+    background-color: $secondaryColor;
+    border: none;
+    font-size: 1em;
+    width: 200px;
+    margin: 0 auto;
+    margin-bottom: 0;
+    padding: 1rem;
+  }
+  .form__GDPR {
+    margin: 0 auto;
+  }
+  .form__gdprInfo {
+    margin: 1rem;
+  }
+
+  .form__timeButton {
+    background-color: $secondaryColor;
+    border: none;
+    font-size: 1em;
+    width: 200px;
+    margin: 1.5rem;
+    margin-bottom: 0;
+    padding: 1rem;
+  }
+
+  .form__timebutton--active{
+    background-color: $hoverColor;
+  }
+
+  @include tablet {
+    .form__submit, .form__timeButton {
+      padding: 1rem 2rem;
+    }
+    .form__timeButton {
+      margin: 2rem;
+    }
+  }
+
+  .form__credentials {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+
+    .form__row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      padding: 1rem 0;
+
+      width: 90%;
+      @include tablet {
+        width: 50%;
+      }
+      
+      label {
+        color: #fff;
+        float: left;
+        margin: 1rem;
+      }
+      .form__textbox {
+        padding-left: 1rem; 
+      }
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+  .gdpr{
+    display: inline-block;
+  }
+  .gdprInfo {
+    margin: 0 auto;
+    width: 90%;
+    padding: 1rem;
+    margin-bottom: 0;
+    
+    p {
+      text-align: left;
+    }
+    @include tablet {
+      width: 70%;
+    }
+  }
+  .gdprInfoHidden{
+    display: none;
+  }
+  #check {
+    margin-bottom: 1rem;
+  }
+}
+.errorMsg {
+  color: red;
+}

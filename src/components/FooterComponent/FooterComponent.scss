@@ -1,0 +1,60 @@
+@import '../../styles/style.scss';
+
+footer {
+  height: 150px;
+  flex: 1;
+  background-color: $secondaryColor;
+  background-size: cover;
+  padding: 3rem;
+}
+a:link {
+  text-decoration: none;
+  color: $primaryColor;
+}
+.contact {
+  width: 100%;
+  text-align: center;
+
+  .footerLogo {
+    font-size: 2em;
+    margin: 0 auto;
+  }
+}
+.socials {
+  width: 100%;
+  text-align: center;
+}
+@include tablet {
+
+  .footerContent {
+    display: flex;
+    justify-content: space-between;
+  } 
+  .contact {
+    width: 50%;
+    text-align: left;
+  
+    .footerLogo {
+      font-size: 2em;
+      margin: 0 auto;
+    }
+  }
+  .socials {
+    width: 30%;
+    text-align: right;
+    align-self: center;
+    color: white;
+
+    a {
+      border-bottom: 1px solid white;
+    }
+    a:visited {
+      color: white;
+    }
+  }
+}
+@include desktop {
+  .contact{
+    width: 30%;
+  }
+}

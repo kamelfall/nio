@@ -1,0 +1,94 @@
+@import '../../styles/style.scss';
+
+.heroImage {
+  height: 85vh;
+  background-image: url("../../images/kitchen.jpg");
+  background-size: cover;
+  background-position: 75%;
+  color: white;
+  overflow: auto;
+  p {
+    margin: 50vh auto 0 auto;
+    font-size: 4rem;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+
+  @include desktop {
+    p, h1 {
+      display: none;
+    }
+  }
+}
+.menuInformation {
+  background-color: $secondaryColor;
+  min-height: 10rem;
+  overflow: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  font-size: 1rem;
+  line-height: 1.75rem;
+
+  @include desktop {
+    padding: 1rem 20rem;
+    font-size: 1.2rem;
+  }
+  h3 {
+    color: $primaryColor;
+    letter-spacing: 5px;
+  }
+  p {
+    color: $primaryColor;
+    letter-spacing: 2px;
+    font-family: $textFont;
+  }
+}
+.restaurantMenu {
+  background-color: $primaryColor;
+  height: auto;
+  overflow: auto;
+  padding: 1rem;
+
+  h2 {
+    margin-top: 2rem;
+    font-size: 2rem;
+    color: $calendarColor;
+    letter-spacing: 6px;
+  }
+  h4 {
+    color: $calendarColor;
+    padding-bottom: 5px;
+    border-bottom: 3px dotted $calendarColor;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  p {
+    color: $calendarColor;
+  }
+  .menuItem {
+    margin-bottom: 1rem;
+  }
+  .menuItemSide {
+    margin-top: 3rem;
+    border: 3px dotted $calendarColor;
+    display: inline-block;
+    padding: 1rem;
+  }
+  .restaurantMenu__button {
+    background-color: $primaryColor;
+    border: 1px solid $secondaryColor;
+    color: $secondaryColor;
+    height: 4rem;
+    width: 10rem;
+    line-height: 4rem;
+    margin: 3rem auto;
+    cursor: pointer;
+  }
+  .restaurantMenu__button:hover {
+    background-color: $secondaryColor;
+    border: 1px solid $primaryColor;
+    color: $primaryColor;
+  }
+
+}

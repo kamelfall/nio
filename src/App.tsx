@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import HomeComponent from './components/HomeComponent/HomeComponent';
+import NavbarComponent from './components/NavbarComponent/NavbarComponent';
+import BookingComponent from './components/BookingComponent/BookingComponent';
+import AdminComponent from './components/AdminComponent/AdminComponent';
+import FooterComponent from './components/FooterComponent/FooterComponent';
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+class App extends React.Component<{},{}> {
+  render() {
+    return (
+      <Router>
+        <div className="App">
+          <NavbarComponent/>
+          <Switch>
+            <Route path="/" exact component={HomeComponent} />
+            <Route path="/#menu" exact component={HomeComponent} />
+            <Route path="/booking" component={BookingComponent} />
+            <Route path="/admin" component={AdminComponent} />
+          </Switch>
+          <FooterComponent/>
+        </div>
+      </Router>
+    );
+  }
 }
 
 export default App;
