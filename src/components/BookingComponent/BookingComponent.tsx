@@ -330,6 +330,14 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
       booking =
         <div>
           <h1 className="booking__heading">Boka</h1>
+          <section className="booking__calendar">
+            <Calendar
+              onChange={this.datePick}
+              onActiveDateChange={this.disableUnavailableDates}
+              value={this.state.date}
+              minDate= {new Date()}
+            />
+          </section>
           <section className="booking__guests">
             <select onChange={this.setSeats}
               value={this.state.seats}>
@@ -340,14 +348,6 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
               <option value="5">5 personer</option>
               <option value="6">6 personer</option>
             </select>
-          </section>
-          <section className="booking__calendar">
-            <Calendar
-              onChange={this.datePick}
-              onActiveDateChange={this.disableUnavailableDates}
-              value={this.state.date}
-              minDate= {new Date()}
-            />
           </section>
           <section className="booking__form">
             <FormComponent 
