@@ -55,7 +55,6 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
     this.setState({
       [name]: value
     });
-    console.log(value);
   }
 
   //puts every unchanged value in state, calls function
