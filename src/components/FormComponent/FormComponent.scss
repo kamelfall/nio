@@ -80,10 +80,15 @@
       margin: 0;
     }
   }
+  .gdpr{
+    display: inline-block;
+  }
   .gdprInfo {
     margin: 0 auto;
     width: 90%;
     padding: 1rem;
+    margin-bottom: 0;
+    
     p {
       text-align: left;
     }
@@ -93,6 +98,9 @@
   }
   .gdprInfoHidden{
     display: none;
+  }
+  #check {
+    margin-bottom: 1rem;
   }
 }
 .errorMsg {
