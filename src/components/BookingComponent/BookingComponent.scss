@@ -2,7 +2,6 @@
 
 #booking {
   background-color: $primaryColor;
-  // padding-top: 1rem;
   flex: 1;
   padding: 8rem 0;
 
@@ -27,9 +26,11 @@
       background: $calendarColor;
       margin: 0 auto;
       width: 60vh;
+      border: none;
     }
     .react-calendar__navigation__label, .react-calendar__navigation__arrow{
       background-color: $calendarColor;
+      color: black;
     }
     .react-calendar__tile--active {
       background: $selectedColor;
