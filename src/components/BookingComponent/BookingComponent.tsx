@@ -104,7 +104,7 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
           array.push(data[i]);
         }
         this.setState({bookings: array});
-      });
+      })
   }
 
   disableUnavailableDates() {
@@ -119,12 +119,19 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
       const trimmedDate = date!.replace(",", "");
       const splitDate = trimmedDate!.split(" ");
       const realDate = splitDate[2] +"-"+ splitDate[1] +"-"+ splitDate[0];
-      const yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
-      
+
+      let yearMonthDateTime = "";
+      if(parseInt(splitDate[0])){
+        yearMonthDateTime = moment(realDate, "YYYY-MMMM-DD").format("YYYY-MM-DD") + " 00:00:00";
+      } else {
+        yearMonthDateTime = moment(realDate, "YYYY-DD-MMMM").format("YYYY-MM-DD") + " 00:00:00";
+      }
+
       // Disables the tile if the corresponfing date is fully booked
+
       let counter = 0;
       for(let i = 0; i < this.state.bookings.length; i++) {
-        if(this.state.bookings[i].date === yearMonthDateTime) {
+        if(moment(this.state.bookings[i].date).date() === moment(yearMonthDateTime).date()) {
           counter++;
 
           if(counter >= 2) {
