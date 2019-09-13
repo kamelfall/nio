@@ -86,7 +86,7 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
       for(let i = 0; i < this.state.bookings.length; i++) {
         if(this.state.bookings[i].date === todaysDate) {
           counter++;
-          if(counter >= 2) {
+          if(counter >= 30) {
             return false;
           }
         }
@@ -134,7 +134,7 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
         if(moment(this.state.bookings[i].date).date() === moment(yearMonthDateTime).date()) {
           counter++;
 
-          if(counter >= 2) {
+          if(counter >= 30) {
             tile.setAttribute("disabled", "true");
             abbr!.setAttribute("style", "pointer-events: none");
           }
@@ -161,10 +161,10 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
           lateCounter++;
         }
         
-        if(earlyCounter >= 1) {
+        if(earlyCounter >= 15) {
           document.getElementById("earlyButton")!.setAttribute("disabled", "true");
         }
-        if(lateCounter >= 1) {
+        if(lateCounter >= 15) {
           document.getElementById("lateButton")!.setAttribute("disabled", "true");
         }
       }
@@ -198,16 +198,14 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
     this.setTimeButtonStyling();
   }
 
-
-
   // When submitting form, form-information is set to state,
   // submitBooking runs and bookingDone is set to true so that
   // confirmation-content is rendered
+
   handleForm = (formContent: IForm) => {
     this.setState({form: formContent}, this.handleBooking);
     this.setState({bookingDone: true});
   }
-
   handleBooking = () => {
     this.submitBooking();
   }
@@ -317,9 +315,9 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
     let time = this.state.form.time;
     let seats = this.state.seats;
   
-
     let booking: any;
 
+    // shows confimation instead of forms if booking is made
     if (this.state.bookingDone === true) {
       booking = 
         <div className="confirmSpace">
@@ -361,7 +359,7 @@ export class BookingComponent extends React.Component<{}, IBookingState> {
             formSubmit={this.handleForm}
              pickedDate={this.state.dateString}/>
           </section>
-        </div>
+        </div>;
     }
     return (
       <main id="booking">

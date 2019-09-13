@@ -27,6 +27,8 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     }
     this.showGdprInfo = this.showGdprInfo.bind(this);
   }
+
+  //validate email address and requires to include @ sign.
   validate = () => {
     let emailValidation = "";
 
@@ -39,34 +41,34 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     }
     return true;
   }
-
+  //sets state values dynamically
   handleChange = (e: any) => {
     const target = e.target;
     const value = target.value;
     const name = target.name;
 
-    
     this.setState({
       [name]: value,
     }, this.setTimeButtonStyling);
   }
 
+  // reset and add highlight for active time
   setTimeButtonStyling(){
     let earlyButton = document.getElementById('earlyButton');
     let lateButton = document.getElementById('lateButton');
     earlyButton!.classList.remove('form__timebutton--active')
     lateButton!.classList.remove('form__timebutton--active')
+
     if(this.state.time === "18:00") {
       earlyButton!.classList.add('form__timebutton--active');
     } else if(this.state.time === "21:00") {
       lateButton!.classList.add('form__timebutton--active');
     }
   }
-
+  // toggles states of gdpr checkbox when clicked
   handleCheckBox = (e: any) => {
     const target = e.target;
     const gdprCheck = target.value;
-    console.log(gdprCheck);
     if(this.state.GDPRChecked === "true"){
       this.setState({
         GDPRChecked: "false",
@@ -77,6 +79,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
       })
     }
   }
+  // Toggles the state of GDPRInfoState when clicked
   showGdprInfo() {
     if(this.state.GDPRInfoState === "false"){
       this.setState({
@@ -88,16 +91,18 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
       })
     }
   }
+  //checks that the form is valid and GDPR box is checked before submitting the form
   createBooking = () => {
     const isValid:any = this.validate();    
     if(isValid && this.state.GDPRChecked === "true") {
-      console.log(this.state);
       this.props.formSubmit(this.state);
     }
   }
   render() {
     let form = <p></p>;
     const time = this.state.time;
+
+    // gets state for GDPR adds diffrent css to class "isShown" depending on state
     const GDPRshown = this.state.GDPRInfoState;
     let isShown: any;
 
@@ -110,7 +115,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
         display: 'block',
       }
     }
-
+    //checks that a date and time is picked before rendering the customer form
     if((time === "18:00" || time === "21:00") && this.props.pickedDate !== "") {
       form = 
       <ul className="form__credentials">
@@ -143,6 +148,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
           dina uppgifter enligt GDPR
         </p>
         <p onClick={this.showGdprInfo} className="gdpr">Vad är GDPR?</p>
+        
         <div style={isShown} className="gdprInfo">
             <p>
               Vi behöver spara och behandla personuppgifter om dig, så som namn, emailadress och 
@@ -185,14 +191,10 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
     }
     return (
       <form id="form">
-        <button type="button" name="time" className="form__timeButton" 
+        <input type="button" name="time" className="form__timeButton" 
           id="earlyButton"
           value="18:00"
-          onClick={this.handleChange}>18:00</button>
-        {/* <input type="button" name="time" className="form__timeButton" 
-          id="earlyButton"
-          value="18:00"
-          onClick={this.handleChange} /> */}
+          onClick={this.handleChange} />
 
         <input type="button" name="time" className="form__timeButton" 
           id="lateButton"
