@@ -13,11 +13,13 @@ interface IBooking {
   time: string
 }
 
+//gets update function from admin
 interface IUpdateProps {
   booking: IBooking,
   updateOrder(state:any): void 
 }
 
+//uses generic key to update states indifferently
 interface IUpdateState {
   [key: string]: string
 }
@@ -26,6 +28,7 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
   constructor(props: IUpdateProps) {
     super(props);
 
+    //converts prop data
     const customer_idString = this.props.booking.customer_id.toString();
     const order_idString = this.props.booking.order_id.toString();
 
@@ -41,7 +44,9 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
       time: this.props.booking.time
     }
   }
-  
+
+  //puts every changed value in state
+  //requires conversion above
   handleChange = (e: any) => {
     const target = e.target;
     const value = target.value;
@@ -53,6 +58,7 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
     console.log(value);
   }
 
+  //puts every unchanged value in state, calls function
   updateCredentials = () => {
     let editState = {...this.state};
     if(this.state.first_name === "") {
@@ -74,7 +80,6 @@ export class UpdateComponent extends React.Component<IUpdateProps, IUpdateState>
   }
 
   render() {
-
     return (
       <form id="update">
         <ul className="update__credentials">

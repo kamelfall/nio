@@ -44,6 +44,8 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     this.adminDeleteOrder = this.adminDeleteOrder.bind(this);
     this.adminUpdateOrder = this.adminUpdateOrder.bind(this);
   }
+
+  //saves database bookings to state array
   componentDidMount() {
     this.setState({bookings:[]})
     axios.get("http://localhost:8888/order/readAll.php")
@@ -57,6 +59,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       })
   }
   
+  //updates booking array with changes
   handleChange(event: any){
     this.setState({bookings:[]})
     axios({
@@ -74,6 +77,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     })
   }
   
+  //deletes order by id
   adminDeleteOrder(id: number) {
     axios.delete(`http://localhost:8888/order/delete.php?id=${id}`)
       .then((result: any) => {
@@ -82,6 +86,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       })
   }
 
+  //sets a selected booking
   adminShowUpdate(id: number) {
     for(let i = 0; i < this.state.bookings.length; i++) {
       if(this.state.bookings[i].order_id === id) {
@@ -90,9 +95,11 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       }
     }
   } 
+  //populates last state with form values and sets state to populated state
   adminUpdateOrder(updatedState: any) {
     let upState = {...this.state};
 
+    //converts back to int from the all string UpdateComponent state
     const customer_idInt = parseInt(updatedState.customer_id);
     const order_idInt = parseInt(updatedState.order_id);
     const phoneInt = parseInt(updatedState.phone);
@@ -111,7 +118,9 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     }
     this.setState(upState, this.finishUpdate);
   }
+  //calls database to replace values
   finishUpdate() {
+    //replaces order table values
     axios({
       method: "PUT",
       url: "http://localhost:8888/order/update.php",
@@ -120,6 +129,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         id: this.state.selectedBooking.order_id
       })
     });
+    //replaces guest table values
     axios({
       method: "PUT",
       url: "http://localhost:8888/guest/update.php",
@@ -132,6 +142,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       })
     });
 
+    //resets state
     let resetState = {...this.state};
     resetState.selectedBooking = {
       customer_id: 0,
@@ -144,17 +155,20 @@ class AdminComponent extends React.Component<{}, IBookingState> {
       seats: 0,
       time: ""
     }
+    //refresh admin table
     this.setState(resetState, this.componentDidMount);
   }
 
   render() {
     let update = <section></section>;
 
+    //conditional render, when booking is selected
     if(this.state.selectedBooking.order_id !== 0) {
       update = <UpdateComponent booking={this.state.selectedBooking} 
       updateOrder={this.adminUpdateOrder} />
     }
 
+    //maps orders to table with buttons calling the respective bookings
     const orders = this.state.bookings;
     const mappedOrders = orders.map(order => 
       <tr key={order.order_id}>
