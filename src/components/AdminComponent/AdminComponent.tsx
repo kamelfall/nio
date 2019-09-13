@@ -170,6 +170,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
 
     //maps orders to table with buttons calling the respective bookings
     const orders = this.state.bookings;
+ 
     const mappedOrders = orders.map(order => 
       <tr key={order.order_id}>
         <td>{order.order_id}</td>
@@ -179,10 +180,10 @@ class AdminComponent extends React.Component<{}, IBookingState> {
         <td>{order.seats}</td>
         <td>{order.email}</td>
                                       
-        <button onClick={this.adminShowUpdate.bind(this, order.order_id)} className="updateOrder" value={order.order_id}>
-        </button>
-        <button onClick={this.adminDeleteOrder.bind(this, order.order_id)} className="deleteOrder" value={order.order_id}>
-        </button>
+        <td><button onClick={this.adminShowUpdate.bind(this, order.order_id)} className="updateOrder" value={order.order_id}>
+        </button></td>
+        <td><button onClick={this.adminDeleteOrder.bind(this, order.order_id)} className="deleteOrder" value={order.order_id}>
+        </button></td>
       </tr>
     )
     
@@ -202,6 +203,7 @@ class AdminComponent extends React.Component<{}, IBookingState> {
               <th>Name</th>
               <th>Seats</th>
               <th>Email</th>
+              <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
