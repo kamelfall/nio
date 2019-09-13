@@ -7,22 +7,44 @@ class HomeComponent extends React.Component<{}, {}> {
     return(
       <main>
         <section className="heroImage">
-          <p>구</p>
+          <p>九</p>
           <h1>nio</h1>
         </section>
         <section className="menuInformation">
-          <p>Konceptet är duvet någonting väldigt komplicerat</p>
+          <h3>Vårt koncept lyder</h3>
+          <p>
+            Slå dig ner, beställ din dryck, och vi börjar leverera mat. 
+            Inget krångel, inget velande. Hos oss får du smaka på allt. Menyn anpassas 
+            efter säsongens råvaror.
+          </p>
         </section>
         <section className="restaurantMenu" id="menu">
-          <h2>Bao's</h2>
-          <ul>
-            <li>Kimchi</li>
-            <li>Shiitake</li>
-            <li>Fläsk</li>
-            <li>Kyckling</li>
-            <li>Tofu</li>
-          </ul>
-          <div className="restaurantMenu__button">Boka bord</div>
+          <h2>Menu</h2>
+          <div className="menuItem">
+            <h4>Kyckling Bao</h4>
+            <p>Svensk gårdskyckling, yoghurt, kimchi, sesam, vårlök</p>
+          </div>
+          <div className="menuItem">
+            <h4>Fläsk Bao</h4>
+            <p>Fläsksida, hoisin sås, picklad gurka, jordnötter, koriander</p>
+          </div>
+          <div className="menuItem">
+            <h4>Shiitake Bao (v)</h4>
+            <p>Shiitake svamp, koriansk bbq-sås, picklad chili,</p>
+          </div>
+          <div className="menuItem">
+            <h4>Tonfisk Bao</h4>
+            <p>Soyamarinerad tonfisktartar, savoykål, pciklade morötter, koriander</p>
+          </div>
+          <div className="menuItem">
+            <h4>Tofu Bao (v)</h4>
+            <p>Pankofritera soyamarinerad tofu, picklad rödkål, chili mayo, vårlök</p>
+          </div>
+          <div className="menuItemSide">
+            <p>Syrad kålsallad, kimchi, edamamebönor, rostade mandlar</p>
+            <p>serveras som små sidorätter</p>
+          </div>
+          <a href="/booking"><div className="restaurantMenu__button">Boka bord</div></a>
         </section>
       </main>
     );

@@ -1,13 +1,14 @@
 @import '../../styles/style.scss';
 
-main {
+#booking {
   background-color: $primaryColor;
-  height: 100vh;
-  padding-top: 1rem;
+  // padding-top: 1rem;
+  flex: 1;
+  padding: 8rem 0;
 
   .booking__heading {
     color: #fff;
-    margin-top: 2rem;
+    margin-top: 5rem;
   }
 
   .booking__guests {
@@ -26,6 +27,9 @@ main {
       background: $calendarColor;
       margin: 0 auto;
       width: 60vh;
+    }
+    .react-calendar__navigation__label, .react-calendar__navigation__arrow{
+      background-color: $calendarColor;
     }
     .react-calendar__tile--active {
       background: $selectedColor;
@@ -47,5 +51,21 @@ main {
       background-color: $primaryColor;
       color: #fff;
     }
+  }
+}
+.confirmSpace {
+  margin-top: 2em;
+  background-color: $secondaryColor;
+  width: 60%;
+  margin: 0 auto;
+  padding: 1rem;
+
+  p {
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    margin: 2em;
+  }
+  .finstilta {
+    font-size: 0.8em;
   }
 }

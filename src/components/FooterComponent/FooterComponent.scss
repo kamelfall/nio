@@ -1,22 +1,21 @@
 @import '../../styles/style.scss';
+
 footer {
-  border: 1px solid white;
   height: 150px;
+  flex: 1;
   background-color: $secondaryColor;
-  margin-top: 100vh;
+  // background-image: url("../../images/footer.jpg");
+  background-size: cover;
   padding: 3rem;
 }
-.footerContent {
-  display: flex;
-  justify-content: space-between;
-}
+
 a:link {
   text-decoration: none;
   color: $primaryColor;
 }
 .contact {
-  width: 30%;
-  text-align: left;
+  width: 100%;
+  text-align: center;
 
   .footerLogo {
     font-size: 2em;
@@ -24,7 +23,40 @@ a:link {
   }
 }
 .socials {
-  width: 30%;
-  text-align: right;
-  align-self: center;
+  width: 100%;
+  text-align: center;
+}
+@include tablet {
+
+  .footerContent {
+    display: flex;
+    justify-content: space-between;
+  } 
+  .contact {
+    width: 50%;
+    text-align: left;
+  
+    .footerLogo {
+      font-size: 2em;
+      margin: 0 auto;
+    }
+  }
+  .socials {
+    width: 30%;
+    text-align: right;
+    align-self: center;
+    color: white;
+    a {
+      border-bottom: 1px solid white;
+    }
+    a:visited {
+      color: white;
+    }
+  }
+}
+@include desktop {
+  .contact{
+    width: 30%;
+
+  }
 }

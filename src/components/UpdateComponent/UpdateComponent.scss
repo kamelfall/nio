@@ -1,0 +1,57 @@
+@import '../../styles/style.scss';
+
+#update {
+  margin: 0 auto;
+
+  .update__textbox, .update__credentials .update__timeButton {
+    background-color: $secondaryColor2;
+    border: none;
+  }
+
+  .update__submit {
+    padding: 1rem;
+    margin: 2rem auto;
+  }
+
+  .update__timeButton {
+    margin:2rem;
+    padding: 1rem;
+  }
+
+  @include tablet {
+    .update__submit, .update__timeButton {
+      padding: 1rem 2rem;
+    }
+  }
+
+  .update__credentials {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+
+    .update__row {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      padding: 1rem 0;
+
+      width: 90%;
+      @include tablet {
+        width: 50%;
+      }
+      
+      label {
+        color: #fff;
+        float: left;
+        margin: 1rem;
+      }
+      .update__textbox {
+        padding-left: 1rem; 
+      }
+    }
+  }
+}
+.errorMsg {
+  color: red;
+}

@@ -1,45 +1,71 @@
 @import '../../styles/style.scss';
 
-main {
+#admin {
   background-color: $primaryColor;
-  height: 90vh;
-  margin-top: 10vh;
+
+  height: auto;
+  margin-top: 5vh;
+  padding: 5rem 0;
+
+  .admin__h2 {
+    font-size: 2em;
+    color: $secondaryColor;
+    letter-spacing: 4px;
+  }
 }
 .admin__input {
   margin-bottom: 2rem;
   height: 2em;
-  width: 20%;
+  width: 70%;
+  padding-left: 1rem;
   border-radius: 20px;
   font-size: 1.2em;
   font-family: $textFont;
   -webkit-transition: width 0.4s ease-in-out;
   transition: width 0.4s ease-in-out;
-
   ::placeholder {
     color: $primaryColor;
   }
+  @include tablet {
+    width: 50%;
+  }
+  @include desktop {
+    width: 27%;
+  }
 }
-.admin__input:focus {
-  width: 50%;
-}
-.admin__h2 {
-  font-size: 2em;
-  color: White;
+@include desktop {
+  .admin__input:focus {
+    width: 50%;
+  }
 }
 article {
-  width: 80%;
+  width: 95%;
   margin: 0 auto;
+  overflow-x: auto;
 
+  @include desktop {
+    width: 80%;
+  }
   table {
-    border: 1px solid white;
+    border: 1px solid $secondaryColor;
     border-collapse: collapse;
     width: 100%;
 
+    tr {
+      border-bottom: 1px solid $secondaryColor;
+    }
     th, td {
       text-align: left;
     }
     th {
-      font-size: 1.5em;
+      font-size: 1.2em;
+      padding: 1em 0.5em;
+      color: $secondaryColor2;
+      letter-spacing: 1px;
+    }
+    td {
+      padding: 1em;
+      color: $secondaryColor2;
     }
   }
 }
