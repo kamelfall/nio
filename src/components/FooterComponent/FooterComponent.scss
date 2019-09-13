@@ -4,11 +4,9 @@ footer {
   height: 150px;
   flex: 1;
   background-color: $secondaryColor;
-  // background-image: url("../../images/footer.jpg");
   background-size: cover;
   padding: 3rem;
 }
-
 a:link {
   text-decoration: none;
   color: $primaryColor;
@@ -46,6 +44,7 @@ a:link {
     text-align: right;
     align-self: center;
     color: white;
+
     a {
       border-bottom: 1px solid white;
     }
@@ -57,6 +56,5 @@ a:link {
 @include desktop {
   .contact{
     width: 30%;
-
   }
 }

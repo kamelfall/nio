@@ -51,10 +51,13 @@ class AdminComponent extends React.Component<{}, IBookingState> {
     axios.get("http://localhost:8888/order/readAll.php")
       .then((result: any) => {
         let array = this.state.bookings;
-        let data:[] = result.data.records;
-        for(let i = 0; i < data.length; i++) {
-          array.push(data[i]);
-        }
+        let records:IBooking[] = result.data.records;
+        records.forEach(record => {
+          const date = record.date.split(" ");
+          record.date = date[0];
+          array.push(record);
+        });
+        
         this.setState({bookings: array});
       })
   }
