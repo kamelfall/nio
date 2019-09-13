@@ -142,8 +142,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
         <p className="form__gdprInfo" >Vänligen kryssa i rutan nedan för att godkänna att vi lagrar 
           dina uppgifter enligt GDPR
         </p>
-        <input id="check" type="checkbox" className="form__GDPR"  value="true" onChange={this.handleCheckBox}/>
-        <p onClick={this.showGdprInfo} >Vad är GDPR?</p>
+        <p onClick={this.showGdprInfo} className="gdpr">Vad är GDPR?</p>
         <div style={isShown} className="gdprInfo">
             <p>
               Vi behöver spara och behandla personuppgifter om dig, så som namn, emailadress och 
@@ -177,6 +176,7 @@ export class FormComponent extends React.Component<IFormProps, IFormState> {
               tillsynsmyndigheten Datainspektionen.
             </p>
           </div>
+          <input id="check" type="checkbox" className="form__GDPR"  value="true" onChange={this.handleCheckBox}/>
         <input type="button" className="form__submit" value="Boka"
           onClick={this.createBooking} />
       </ul>
